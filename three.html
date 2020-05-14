@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+      body,html {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #hero {
+        width: 100%;
+        height: 100%;
+        background: red;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <title>3D</title>
+  </head>
+  <body>
+    <div id="hero"> </div>
+    <script src="./lib/cannon.min.js"></script>
+    <script type="module">
+      import * as THREE from "./threejs/build/three.module.js";
+      import { GLTFLoader } from "./threejs/examples/jsm/loaders/GLTFLoader.js";
+    
+      var container, stats, controls, spotlight, target, floor, hole, character, world;
+      var characters = [], physicsBoxes = [];
+      var timeStep = 1/60;
+      
+      // push state
+      const pushState = {
+        NO_PUSH: 0,
+        WILL_PUSH: 1,
+        DID_PUSH: 2
+      };
+      var currentPushState = pushState.NO_PUSH;
+
+      var camera, scene, renderer;
+      var raycaster = new THREE.Raycaster();
+      var mouse = new THREE.Vector2( 0, 0 );
+      var cameraOrbitAngle = 90;
+      const BACKGROUND_COLOR = 0x000000;
+      const FOG_NEAR = 6;
+      const FOG_FAR = 16;
+      const FOG_COLOR = BACKGROUND_COLOR;
+      const CAMERA_ORBIT_RADIUS = 7.8;
+      const CAMERA_TRAVEL_SPEED = 0.1; // 1 degree per update
+      const CAMERA_LOOK_AT = new THREE.Vector3(0, 0, 0);
+      const CAMERA_TRAVEL_RANGE = 10; // in degree
+    
+      init();
+      initCannon();
+      animate();
+    
+      function init() {
+        container = document.createElement('div');
+        var hero = document.getElementById('hero');
+        hero.appendChild(container);
+    
+        camera = new THREE.PerspectiveCamera( 45, hero.offsetWidth / hero.offsetHeight, 0.25, 100);
+        camera.position.set(10.2075, 5.08449, 10.2075);
+        camera.lookAt(CAMERA_LOOK_AT);
+
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(BACKGROUND_COLOR);
+        //scene.fog = new THREE.Fog(FOG_COLOR, FOG_NEAR, FOG_FAR);
+        //scene.fog = new THREE.FogExp2(FOG_COLOR, 0.08);
+
+        spotlight = new THREE.SpotLight( 0xFFCB93 );
+        spotlight.position.set(10.2075, 20, 10.2075);
+        spotlight.distance = 0;
+        spotlight.decay = 2;
+        spotlight.angle = Math.PI / 32;
+        spotlight.intensity = 1;
+        spotlight.penumbra = 1;
+        spotlight.castShadow = true;
+        scene.add(spotlight);
+
+        target = new THREE.Object3D();
+        target.position.set(0, 0, 0);
+        scene.add(target);
+        spotlight.target = target;
+
+        /*var planeGeo = new THREE.PlaneGeometry( 50, 50, 2, 2 );
+        var planeMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+        floor = new THREE.Mesh( planeGeo, planeMaterial);
+        floor.rotateX(-Math.PI / 2);
+        floor.position.set(0, -0.01, 0);
+        scene.add(floor);*/
+
+        var loader = new GLTFLoader().setPath("models/");
+        loader.load('butthole.gltf', function(gltf) {
+          // load successful
+          var light_count = 0;
+          gltf.scene.traverse(function(child) {
+            if (child.isLight) {
+              child.visible = false;
+            } else if (child.isMesh) {
+              //console.log("current node: " + child.name);
+              // Only stage receives shadow but don't cast shadow
+              // TODO: Only headset casts shadow? To reduce performance impact
+              child.receiveShadow = (child.name == "Stage") ? true : false;
+              child.castShadow = (child.name == "Stage") ? false : true;
+            }
+
+            if (child.name == "Grid") {
+              floor = child;
+            }
+
+            if (child.name == "Grid001") {
+              hole = child;
+            }
+
+            if (child.name == "Body") {
+              character = child;
+              child.position.set(1.680, 0, -1.417);
+            }
+
+          });
+          scene.add(gltf.scene);
+        });
+    
+        renderer = new THREE.WebGLRenderer( {antialias: true} );
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(hero.offsetWidth, hero.offsetHeight);
+        renderer.gammaOutput = true;
+        renderer.shadowMapEnabled = true;
+        renderer.shadowMapType = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+    
+        // Orbit controls
+        /*controls = new OrbitControls( camera, renderer.domElement );
+        controls.target.set( 0, - 0.2, - 0.2 );
+        controls.update();*/
+    
+        // Disable window resizing to avoid weird stretching of canvas
+        // TOFIX: handle window resizing
+        window.addEventListener('resize', onWindowResize, false);
+        window.addEventListener('orientationchange', onWindowResize, false);
+      }
+
+      function newPhysicsBody() {
+        var shape = new CANNON.Box(new CANNON.Vec3(0.1,0.1,0.1));
+        const mass = 1;
+        var body = new CANNON.Body({
+            mass: mass
+        });
+        var pos = new CANNON.Vec3(0, 0, 0);
+        if (character != undefined) {
+          pos = new CANNON.Vec3(character.position.x, 0, character.position.z);
+        }
+        body.addShape(shape);
+        body.position.set(pos.x, pos.y, pos.z);
+        //body.velocity.set(0, 1, 0);
+        //body.angularVelocity.set(0,10,0);
+        body.linearDamping = body.angularDamping = 0.5;
+        return body;
+      }
+
+      function initCannon() {
+        world = new CANNON.World();
+        world.gravity.set(0,-9.82,0);
+        world.broadphase = new CANNON.NaiveBroadphase();
+        world.solver.iterations = 10;
+
+        // Create a plane
+        var groundBody = new CANNON.Body({
+            mass: 0 // mass == 0 makes the body static
+        });
+        var groundShape = new CANNON.Plane();
+        groundBody.addShape(groundShape);
+        groundBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1,0,0),-Math.PI/2);
+        world.addBody(groundBody);
+      }
+
+      function randomVelocity() {
+        var rand = Math.random();
+        return ((Math.round(rand) == 0) ? -1 : 1) * (1 + Math.round(rand * 4));
+      }
+
+      function pushing() {
+        if (character != undefined) {
+          // add character
+          var c = character.clone();
+          scene.add(c);
+          characters.push(c);
+
+          // add physics body
+          var b = newPhysicsBody();
+          world.addBody(b);
+          physicsBoxes.push(b);
+
+          // push
+          b.velocity.set(randomVelocity(), 10, randomVelocity());
+
+          setTimeout(function() {
+            const index = array.indexOf(b);
+            physicsBoxes.splice(index, 1);
+            characters.splice(index, 1);
+          }, 3000);
+        }
+        currentPushState = pushState.DID_PUSH;
+      }
+
+      // TOFIX: don't update when the box in rest
+      function updatePhysics() {
+
+        // Step the physics world
+        world.step(timeStep);
+
+        // Copy coordinates from Cannon.js to Three.js
+        var i = 0;
+        characters.forEach(c => {
+          var b = physicsBoxes[i];
+          c.position.copy(b.position);
+          c.quaternion.copy(b.quaternion);
+          i++;
+        });
+      }
+
+      function onMouseMove(event) {
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+      }
+    
+      function onSingleTouchMove(event) {
+        if (event.touches.length > 1) {
+          return;
+        }
+    
+        event.preventDefault();
+        mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+        mouse.y = - (event.touches[0].clientY / window.innerHeight) * 2 + 1;
+      }
+    
+      function onWindowResize() {
+        var hero = document.getElementById('hero');
+        // Below code will cause distortion on canvas
+        camera.aspect = hero.offsetWidth / hero.offsetHeight;
+        camera.updateProjectionMatrix();
+    
+        renderer.setSize(hero.offsetWidth, hero.offsetHeight);
+        renderer.render(scene, camera);
+      }
+    
+      function animate() {
+        requestAnimationFrame(animate);
+    
+        // orbit the camera
+        /*const shallAngle = 90 + step(mouse.x, [-1, 1], [-CAMERA_TRAVEL_RANGE, CAMERA_TRAVEL_RANGE]);
+        cameraOrbitAngle += (shallAngle - cameraOrbitAngle) * 0.1;
+        camera.position.x = CAMERA_ORBIT_RADIUS * Math.cos(cameraOrbitAngle * Math.PI / 180);
+        camera.position.z = CAMERA_ORBIT_RADIUS * Math.sin(cameraOrbitAngle* Math.PI / 180);
+        camera.lookAt(CAMERA_LOOK_AT);*/
+
+        if (floor != undefined && hole != undefined) {
+          raycaster.setFromCamera(mouse, camera);
+          var intersects = raycaster.intersectObjects([floor, hole]);
+          if (intersects.length > 0) {
+            target.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+            // check hit target is hole or floor
+            if (intersects[0].object.name == "Grid001") {
+              // hitting hole
+              if (currentPushState == pushState.NO_PUSH) {
+                currentPushState = pushState.WILL_PUSH;
+              }
+            } else {
+              // hitting floor
+              if (currentPushState == pushState.DID_PUSH) {
+                // change push state only when the stuff is pushed
+                currentPushState = pushState.NO_PUSH;
+              }
+            }
+            
+          }
+        }
+
+        if (currentPushState == pushState.WILL_PUSH) {
+          pushing();
+        }
+
+        updatePhysics();
+        
+        renderer.render(scene, camera);
+      }
+    
+      function step(value, input_range, output_range) {
+        // input_range: [min, max] input
+        // output_range: [min, max] output
+        const o = output_range[0] + (value - input_range[0]) * (output_range[1] - output_range[0]) / (input_range[1] - input_range[0]);
+        return Math.min( Math.max(o ,output_range[0]), output_range[1])
+      }
+    
+      window.addEventListener('mousemove', onMouseMove, false);
+      container.addEventListener('touchmove', onSingleTouchMove, false);
+    </script>
+  </body>
+</html>
