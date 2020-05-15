@@ -136,24 +136,18 @@
             if (child.isLight) {
               child.visible = false;
             } else if (child.isMesh) {
-              console.log("current node: " + child.name);
-              if (child.name == "Grid") {
+              if (child.name == "Floor") {
                 child.receiveShadow = true;
                 floor = child;
               }
-
-              if (child.name == "Grid001") {
-                child.receiveShadow = true;
-                hole = child;
-              }
               
-              if (child.parent.name == "Body") {
+              if (child.parent.name == "Puppet") {
                 // character, cast shadow
                 child.castShadow = true;
               }
             }
 
-            if (child.name == "Body") {
+            if (child.name == "Puppet") {
               character = child;
               //child.position.set(1.680, 0, -1.417);
             }
@@ -162,10 +156,7 @@
           // handle animation clips
           mixer = new THREE.AnimationMixer(model);
           clips = gltf.animations;
-          holeClip = THREE.AnimationClip.findByName(clips, 'KeyAction');
-          /*clips.forEach(function(clip) {
-            mixer.clipAction(clip).setLoop(THREE.LoopOnce, 1).play();
-          });*/
+          holeClip = THREE.AnimationClip.findByName(clips, 'HoleAction');
 
           scene.add(model);
           update();
@@ -238,6 +229,10 @@
         return -0.5 + 1.0 * rand;
       }
 
+      function randomNegative() {
+        return (Math.random() > 0.5) ? -1 : 1;
+      }
+
       function pushing() {
         currentPushState = pushState.WILL_PUSH;
         if (character != undefined && holeClip != undefined && mixer != undefined) {
@@ -260,7 +255,7 @@
             const vz = randomVelocity();
             const vy = FORCE;
             b.velocity.set(vx, vy, vz);
-            b.angularVelocity.set(5, 5, 5);
+            b.angularVelocity.set( 5 * randomNegative(), 5 * randomNegative(), 5 * randomNegative());
             //b.applyForce(new CANNON.Vec3(1000, 10000, 1000), new CANNON.Vec3(b.position.x + randomPositionAddon(), b.position.y, b.position.z + randomPositionAddon()));
             currentPushState = pushState.DID_PUSH;
             /*setTimeout(function() {
@@ -325,13 +320,14 @@
       function update() {
         requestAnimationFrame(update);
 
-        if (floor != undefined && hole != undefined) {
+        if (floor != undefined) {
           raycaster.setFromCamera(mouse, camera);
-          var intersects = raycaster.intersectObjects([floor, hole]);
+          var intersects = raycaster.intersectObject(floor);
           if (intersects.length > 0) {
-            target.position.set(intersects[0].point.x, intersects[0].point.y, intersects[0].point.z);
+            const hitPoint = intersects[0].point;
+            target.position.set(hitPoint.x, hitPoint.y, hitPoint.z);
             // check hit target is hole or floor
-            if (intersects[0].object.name == "Grid001") {
+            if (hitPoint.x > 0.2 && hitPoint.x < 2.8 && hitPoint.z < -0.2 && hitPoint.z > -2.8) {
               // hitting hole
               if (currentPushState == pushState.NO_PUSH) {
                 currentPushState = pushState.SHALL_PUSH;
