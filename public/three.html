@@ -54,7 +54,8 @@
       import * as THREE from "./threejs/build/three.module.js";
       import { GLTFLoader } from "./threejs/examples/jsm/loaders/GLTFLoader.js";
     
-      var container, stats, controls, spotlight, target, floor, hole, character, world;
+      var container, stats, controls, spotlight, target, floor, hole, character, world, mixer, clips = [];
+      var clock = new THREE.Clock();
       var characters = [], physicsBoxes = [];
       var timeStep = 1/60;
       const FORCE = 8;
@@ -82,7 +83,6 @@
     
       init();
       initCannon();
-      animate();
     
       function init() {
         container = document.createElement('div');
@@ -124,7 +124,8 @@
         loader.load('butthole.gltf', function(gltf) {
           // load successful
           var light_count = 0;
-          gltf.scene.traverse(function(child) {
+          var model = gltf.scene;
+          model.traverse(function(child) {
             if (child.isLight) {
               child.visible = false;
             } else if (child.isMesh) {
@@ -147,9 +148,17 @@
               character = child;
               child.position.set(1.680, 0, -1.417);
             }
-
           });
-          scene.add(gltf.scene);
+
+          // handle animation clips
+          mixer = new THREE.AnimationMixer(model);
+          clips = gltf.animations;
+          clips.forEach(function(clip) {
+            mixer.clipAction(clip).setLoop(THREE.LoopOnce, 1).play();
+          });
+
+          scene.add(model);
+          animate();
         });
     
         renderer = new THREE.WebGLRenderer( {antialias: true} );
@@ -322,8 +331,17 @@
         }
 
         updatePhysics();
+
+        updateAnimation();
         
         renderer.render(scene, camera);
+      }
+
+      function updateAnimation() {
+        if (mixer != undefined && clips.length > 0) {
+          var delta = clock.getDelta();
+          mixer.update(delta);
+        }
       }
     
       function step(value, input_range, output_range) {
