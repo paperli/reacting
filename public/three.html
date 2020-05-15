@@ -235,8 +235,10 @@
           //b.applyForce(new CANNON.Vec3(1000, 500, 1000), new CANNON.Vec3(b.position.x + randomPositionAddon(), b.position.y, b.position.z + randomPositionAddon()));
 
           setTimeout(function() {
-            const index = array.indexOf(b);
+            const index = physicsBoxes.indexOf(b);
             physicsBoxes.splice(index, 1);
+            world.removeBody(b);
+            console.log(`how many bodies? ${world.bodies.length}`);
             characters.splice(index, 1);
           }, 3000);
         }
