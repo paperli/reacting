@@ -54,17 +54,18 @@
       import * as THREE from "./threejs/build/three.module.js";
       import { GLTFLoader } from "./threejs/examples/jsm/loaders/GLTFLoader.js";
     
-      var container, stats, controls, spotlight, target, floor, hole, character, world, mixer, clips = [];
+      var container, stats, controls, spotlight, target, floor, hole, character, world, mixer, clips = [], holeClip;
       var clock = new THREE.Clock();
       var characters = [], physicsBoxes = [];
       var timeStep = 1/60;
-      const FORCE = 8;
+      const FORCE = 12;
       
       // push state
       const pushState = {
         NO_PUSH: 0,
-        WILL_PUSH: 1,
-        DID_PUSH: 2
+        SHALL_PUSH: 1,
+        WILL_PUSH: 2,
+        DID_PUSH: 3
       };
       var currentPushState = pushState.NO_PUSH;
 
@@ -106,6 +107,12 @@
         spotlight.intensity = 1;
         spotlight.penumbra = 1;
         spotlight.castShadow = true;
+        spotlight.shadow.mapSize.width = 1024;
+        spotlight.shadow.mapSize.height = 1024;
+
+        spotlight.shadow.camera.near = 0.5;
+        spotlight.shadow.camera.far = 500;
+        spotlight.shadow.bias = -0.0001;
         scene.add(spotlight);
 
         target = new THREE.Object3D();
@@ -129,36 +136,39 @@
             if (child.isLight) {
               child.visible = false;
             } else if (child.isMesh) {
-              //console.log("current node: " + child.name);
-              // Only stage receives shadow but don't cast shadow
-              // TODO: Only headset casts shadow? To reduce performance impact
-              child.receiveShadow = (child.name == "Stage") ? true : false;
-              child.castShadow = (child.name == "Stage") ? false : true;
-            }
+              console.log("current node: " + child.name);
+              if (child.name == "Grid") {
+                child.receiveShadow = true;
+                floor = child;
+              }
 
-            if (child.name == "Grid") {
-              floor = child;
-            }
-
-            if (child.name == "Grid001") {
-              hole = child;
+              if (child.name == "Grid001") {
+                child.receiveShadow = true;
+                hole = child;
+              }
+              
+              if (child.parent.name == "Body") {
+                // character, cast shadow
+                child.castShadow = true;
+              }
             }
 
             if (child.name == "Body") {
               character = child;
-              child.position.set(1.680, 0, -1.417);
+              //child.position.set(1.680, 0, -1.417);
             }
           });
 
           // handle animation clips
           mixer = new THREE.AnimationMixer(model);
           clips = gltf.animations;
-          clips.forEach(function(clip) {
+          holeClip = THREE.AnimationClip.findByName(clips, 'KeyAction');
+          /*clips.forEach(function(clip) {
             mixer.clipAction(clip).setLoop(THREE.LoopOnce, 1).play();
-          });
+          });*/
 
           scene.add(model);
-          animate();
+          update();
         });
     
         renderer = new THREE.WebGLRenderer( {antialias: true} );
@@ -166,7 +176,7 @@
         renderer.setSize(hero.offsetWidth, hero.offsetHeight);
         renderer.gammaOutput = true;
         renderer.shadowMapEnabled = true;
-        renderer.shadowMapType = THREE.PCFSoftShadowMap;
+        renderer.shadowMapType = THREE.PCFShadowMap;
         container.appendChild(renderer.domElement);
     
         // Orbit controls
@@ -181,19 +191,24 @@
       }
 
       function newPhysicsBody() {
-        var shape = new CANNON.Box(new CANNON.Vec3(0.613,1.2,0.613));
+        //var shape = new CANNON.Box(new CANNON.Vec3(0.5,1.2,0.5));
+        var shape = new CANNON.Cylinder(0.6, 0.2, 1.2, 20);
+        var quat = new CANNON.Quaternion(0.5, 0, 0, 0.5);
+        quat.normalize();
+        
         var body = new CANNON.Body({
-            mass: 4
+            mass: 10
         });
-        var pos = new CANNON.Vec3(0, 1, 0);
+        var pos = new CANNON.Vec3(0, 0.1, 0);
         if (character != undefined) {
-          pos = new CANNON.Vec3(character.position.x, 1, character.position.z);
+          pos = new CANNON.Vec3(character.position.x, 0.1, character.position.z);
         }
-        body.addShape(shape);
+        body.addShape(shape, new CANNON.Vec3(0, 0.6, 0), quat);
         body.position.set(pos.x, pos.y, pos.z);
         //body.velocity.set(0, 1, 0);
         //body.angularVelocity.set(0,10,0);
-        body.linearDamping = body.angularDamping = 0.5;
+        body.linearDamping = 0.5;
+        body.angularDamping = 0.5;
         return body;
       }
 
@@ -215,7 +230,7 @@
 
       function randomVelocity() {
         var rand = Math.random();
-        return ((Math.round(rand) == 0) ? -1 : 1) * (1.5 + Math.round(rand * 4));
+        return ((Math.round(rand) == 0) ? -1 : 1) * (1 + Math.round(rand * 2));
       }
 
       function randomPositionAddon() {
@@ -224,32 +239,45 @@
       }
 
       function pushing() {
-        currentPushState = pushState.DID_PUSH;
-        if (character != undefined) {
-          // add character
-          var c = character.clone();
-          scene.add(c);
-          characters.push(c);
+        currentPushState = pushState.WILL_PUSH;
+        if (character != undefined && holeClip != undefined && mixer != undefined) {
+          
+          setTimeout(function() {
+            
+            // add character
+            var c = character.clone();
+            c.castShadow = true;
+            scene.add(c);
+            characters.push(c);
 
-          // add physics body
-          var b = newPhysicsBody();
-          world.addBody(b);
-          physicsBoxes.push(b);
+            // add physics body
+            var b = newPhysicsBody();
+            world.addBody(b);
+            physicsBoxes.push(b);
 
-          // push
-          const vx = randomVelocity();
-          const vz = randomVelocity();
-          const vy = FORCE;
-          b.velocity.set(vx, vy, vz);
+            // push
+            const vx = randomVelocity();
+            const vz = randomVelocity();
+            const vy = FORCE;
+            b.velocity.set(vx, vy, vz);
+            b.angularVelocity.set(5, 5, 5);
+            //b.applyForce(new CANNON.Vec3(1000, 10000, 1000), new CANNON.Vec3(b.position.x + randomPositionAddon(), b.position.y, b.position.z + randomPositionAddon()));
+            currentPushState = pushState.DID_PUSH;
+            /*setTimeout(function() {
+              const index = physicsBoxes.indexOf(b);
+              physicsBoxes.splice(index, 1);
+              world.removeBody(b);
+              console.log(`how many bodies? ${world.bodies.length}`);
+              characters.splice(index, 1);
+            }, 4000);*/
+          }, 1400);
           //b.applyForce(new CANNON.Vec3(1000, 500, 1000), new CANNON.Vec3(b.position.x + randomPositionAddon(), b.position.y, b.position.z + randomPositionAddon()));
 
-          setTimeout(function() {
-            const index = physicsBoxes.indexOf(b);
-            physicsBoxes.splice(index, 1);
-            world.removeBody(b);
-            console.log(`how many bodies? ${world.bodies.length}`);
-            characters.splice(index, 1);
-          }, 3000);
+          // Hole animation clip
+          var clipAction = mixer.clipAction(holeClip).setLoop(THREE.LoopOnce);
+          clipAction.reset();
+          clipAction.play();
+          
         }
       }
 
@@ -294,15 +322,8 @@
         renderer.render(scene, camera);
       }
     
-      function animate() {
-        requestAnimationFrame(animate);
-    
-        // orbit the camera
-        /*const shallAngle = 90 + step(mouse.x, [-1, 1], [-CAMERA_TRAVEL_RANGE, CAMERA_TRAVEL_RANGE]);
-        cameraOrbitAngle += (shallAngle - cameraOrbitAngle) * 0.1;
-        camera.position.x = CAMERA_ORBIT_RADIUS * Math.cos(cameraOrbitAngle * Math.PI / 180);
-        camera.position.z = CAMERA_ORBIT_RADIUS * Math.sin(cameraOrbitAngle* Math.PI / 180);
-        camera.lookAt(CAMERA_LOOK_AT);*/
+      function update() {
+        requestAnimationFrame(update);
 
         if (floor != undefined && hole != undefined) {
           raycaster.setFromCamera(mouse, camera);
@@ -313,7 +334,7 @@
             if (intersects[0].object.name == "Grid001") {
               // hitting hole
               if (currentPushState == pushState.NO_PUSH) {
-                currentPushState = pushState.WILL_PUSH;
+                currentPushState = pushState.SHALL_PUSH;
               }
             } else {
               // hitting floor
@@ -323,10 +344,16 @@
               }
             }
             
+          } else {
+            // hitting nothing
+            if (currentPushState == pushState.DID_PUSH) {
+              // change push state only when the stuff is pushed
+              currentPushState = pushState.NO_PUSH;
+            }
           }
         }
 
-        if (currentPushState == pushState.WILL_PUSH) {
+        if (currentPushState == pushState.SHALL_PUSH) {
           pushing();
         }
 
