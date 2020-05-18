@@ -53,8 +53,12 @@
     <script type="module">
       import * as THREE from "./threejs/build/three.module.js";
       import { GLTFLoader } from "./threejs/examples/jsm/loaders/GLTFLoader.js";
+      import { EffectComposer } from './threejs/examples/jsm/postprocessing/EffectComposer.js';
+      import { RenderPass } from './threejs/examples/jsm/postprocessing/RenderPass.js';
+			import { UnrealBloomPass } from './threejs/examples/jsm/postprocessing/UnrealBloomPass.js';
     
       var container, stats, controls, spotlight, target, floor, hole, character, world, mixer, clips = [], holeClip;
+      var composer;
       var clock = new THREE.Clock();
       var characters = [], physicsBoxes = [];
       var timeStep = 1/60;
@@ -72,26 +76,23 @@
       var camera, scene, renderer;
       var raycaster = new THREE.Raycaster();
       var mouse = new THREE.Vector2( 0, 0 );
-      var cameraOrbitAngle = 90;
       const BACKGROUND_COLOR = 0x000000;
       const FOG_NEAR = 6;
       const FOG_FAR = 16;
       const FOG_COLOR = BACKGROUND_COLOR;
-      const CAMERA_ORBIT_RADIUS = 7.8;
-      const CAMERA_TRAVEL_SPEED = 0.1; // 1 degree per update
       const CAMERA_LOOK_AT = new THREE.Vector3(0, 0, 0);
-      const CAMERA_TRAVEL_RANGE = 10; // in degree
+
+      var hero = document.getElementById('hero');
     
       init();
       initCannon();
     
       function init() {
         container = document.createElement('div');
-        var hero = document.getElementById('hero');
         hero.appendChild(container);
     
-        camera = new THREE.PerspectiveCamera( 45, hero.offsetWidth / hero.offsetHeight, 0.25, 100);
-        camera.position.set(10.2075, 5.08449, 10.2075);
+        camera = new THREE.PerspectiveCamera( 36, hero.offsetWidth / hero.offsetHeight, 0.25, 100);
+        camera.position.set(10.2075, 6, 10.2075);
         camera.lookAt(CAMERA_LOOK_AT);
 
         scene = new THREE.Scene();
@@ -165,10 +166,18 @@
         renderer = new THREE.WebGLRenderer( {antialias: true} );
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(hero.offsetWidth, hero.offsetHeight);
-        renderer.gammaOutput = true;
-        renderer.shadowMapEnabled = true;
-        renderer.shadowMapType = THREE.PCFShadowMap;
+        renderer.outputEncoding = THREE.GammaEncoding;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFShadowMap;
         container.appendChild(renderer.domElement);
+
+        // post-processing
+        var renderScene = new RenderPass(scene, camera);
+        var bloomPass = new UnrealBloomPass(new THREE.Vector2(hero.clientWidth, hero.clientHeight), 2.2, 1.0, 0.4);
+
+        composer = new EffectComposer(renderer);
+        composer.addPass(renderScene);
+        composer.addPass(bloomPass);
     
         // Orbit controls
         /*controls = new OrbitControls( camera, renderer.domElement );
@@ -293,8 +302,8 @@
       }
 
       function onMouseMove(event) {
-        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        mouse.x = ( event.clientX / hero.clientWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / hero.clientHeight ) * 2 + 1;
       }
     
       function onSingleTouchMove(event) {
@@ -303,8 +312,8 @@
         }
     
         event.preventDefault();
-        mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
-        mouse.y = - (event.touches[0].clientY / window.innerHeight) * 2 + 1;
+        mouse.x = (event.touches[0].clientX / hero.clientWidth) * 2 - 1;
+        mouse.y = - (event.touches[0].clientY / hero.clientHeight) * 2 + 1;
       }
     
       function onWindowResize() {
@@ -314,7 +323,8 @@
         camera.updateProjectionMatrix();
     
         renderer.setSize(hero.offsetWidth, hero.offsetHeight);
-        renderer.render(scene, camera);
+        composer.setSize(hero.offsetWidth, hero.offsetHeight);
+        //renderer.render(scene, camera);
       }
     
       function update() {
@@ -357,7 +367,8 @@
 
         updateAnimation();
         
-        renderer.render(scene, camera);
+        //renderer.render(scene, camera);
+        composer.render();
       }
 
       function updateAnimation() {
