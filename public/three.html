@@ -50,12 +50,13 @@
   <body>
     <div id="hero"> </div>
     <script src="./threejs/build/three.min.js"></script>
+    <script src="./lib/partykals.js"></script>
     <script src="./lib/cannon.min.js"></script>
     <script type="module">
       import { GLTFLoader } from "./threejs/examples/jsm/loaders/GLTFLoader.js";
-      import { EffectComposer } from './threejs/examples/jsm/postprocessing/EffectComposer.js';
+      /*import { EffectComposer } from './threejs/examples/jsm/postprocessing/EffectComposer.js';
       import { RenderPass } from './threejs/examples/jsm/postprocessing/RenderPass.js';
-      import { UnrealBloomPass } from './threejs/examples/jsm/postprocessing/UnrealBloomPass.js';
+      import { UnrealBloomPass } from './threejs/examples/jsm/postprocessing/UnrealBloomPass.js';*/
     
       var container, stats, controls, spotlight, target, floor, hole, character, world, mixer, clips = [], holeClip;
       var composer;
