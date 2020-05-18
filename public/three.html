@@ -59,7 +59,11 @@
       import { UnrealBloomPass } from './threejs/examples/jsm/postprocessing/UnrealBloomPass.js';*/
     
       var container, stats, controls, spotlight, target, floor, hole, character, world, mixer, clips = [], holeClip;
-      var composer;
+      //var composer;
+
+      // particles system flame
+      var flame;
+
       var clock = new THREE.Clock();
       var characters = [], physicsBoxes = [];
       var timeStep = 1/60;
@@ -171,6 +175,35 @@
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFShadowMap;
         container.appendChild(renderer.domElement);
+
+        // flame particles system
+        flame = new Partykals.ParticlesSystem({
+          container: scene,
+          particles: {
+            globalSize: 0.5,
+            ttl: 1,
+            offset: new Partykals.Randomizers.SphereRandomizer(1),
+            velocityBonus: new THREE.Vector3(0, 2, 0),
+            gravity: -2,
+            globalColor: 0x5384FF,
+            startAlpha: 1.0,
+            endAlpha: 0.0,
+            startAlphaChangeAt: 0.4,
+            blending: 'blend',
+            startSize: 0.5,
+            endSize: 0.1,
+            startSizeChangeAt: 0.4
+          },
+          system: {
+            particlesCount: 10,
+            emitters: new Partykals.Emitter({
+                onInterval: new Partykals.Randomizers.MinMaxRandomizer(0, 2),
+                interval: new Partykals.Randomizers.MinMaxRandomizer(0, 1),
+            }),
+            speed: 1,
+          }
+        });
+        flame.particleSystem.position.set(1.5, 0, -1.5);
 
         // post-processing
         /*var renderScene = new RenderPass(scene, camera);
@@ -367,6 +400,8 @@
         updatePhysics();
 
         updateAnimation();
+
+        flame.update();
         
         renderer.render(scene, camera);
         //composer.render();
