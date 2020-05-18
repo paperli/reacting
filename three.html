@@ -49,16 +49,21 @@
   </head>
   <body>
     <div id="hero"> </div>
+    <script src="./threejs/build/three.min.js"></script>
+    <script src="./lib/partykals.js"></script>
     <script src="./lib/cannon.min.js"></script>
     <script type="module">
-      import * as THREE from "./threejs/build/three.module.js";
       import { GLTFLoader } from "./threejs/examples/jsm/loaders/GLTFLoader.js";
-      import { EffectComposer } from './threejs/examples/jsm/postprocessing/EffectComposer.js';
+      /*import { EffectComposer } from './threejs/examples/jsm/postprocessing/EffectComposer.js';
       import { RenderPass } from './threejs/examples/jsm/postprocessing/RenderPass.js';
-			import { UnrealBloomPass } from './threejs/examples/jsm/postprocessing/UnrealBloomPass.js';
+      import { UnrealBloomPass } from './threejs/examples/jsm/postprocessing/UnrealBloomPass.js';*/
     
       var container, stats, controls, spotlight, target, floor, hole, character, world, mixer, clips = [], holeClip;
-      var composer;
+      //var composer;
+
+      // particles system flame
+      var flame;
+
       var clock = new THREE.Clock();
       var characters = [], physicsBoxes = [];
       var timeStep = 1/60;
@@ -171,13 +176,42 @@
         renderer.shadowMap.type = THREE.PCFShadowMap;
         container.appendChild(renderer.domElement);
 
+        // flame particles system
+        flame = new Partykals.ParticlesSystem({
+          container: scene,
+          particles: {
+            globalSize: 0.5,
+            ttl: 1,
+            offset: new Partykals.Randomizers.SphereRandomizer(1),
+            velocityBonus: new THREE.Vector3(0, 2, 0),
+            gravity: -2,
+            globalColor: 0x5384FF,
+            startAlpha: 1.0,
+            endAlpha: 0.0,
+            startAlphaChangeAt: 0.4,
+            blending: 'blend',
+            startSize: 0.5,
+            endSize: 0.1,
+            startSizeChangeAt: 0.4
+          },
+          system: {
+            particlesCount: 10,
+            emitters: new Partykals.Emitter({
+                onInterval: new Partykals.Randomizers.MinMaxRandomizer(0, 2),
+                interval: new Partykals.Randomizers.MinMaxRandomizer(0, 1),
+            }),
+            speed: 1,
+          }
+        });
+        flame.particleSystem.position.set(1.5, 0, -1.5);
+
         // post-processing
-        var renderScene = new RenderPass(scene, camera);
+        /*var renderScene = new RenderPass(scene, camera);
         var bloomPass = new UnrealBloomPass(new THREE.Vector2(hero.clientWidth, hero.clientHeight), 2.2, 1.0, 0.4);
 
         composer = new EffectComposer(renderer);
         composer.addPass(renderScene);
-        composer.addPass(bloomPass);
+        composer.addPass(bloomPass);*/
     
         // Orbit controls
         /*controls = new OrbitControls( camera, renderer.domElement );
@@ -323,7 +357,7 @@
         camera.updateProjectionMatrix();
     
         renderer.setSize(hero.offsetWidth, hero.offsetHeight);
-        composer.setSize(hero.offsetWidth, hero.offsetHeight);
+        //composer.setSize(hero.offsetWidth, hero.offsetHeight);
         //renderer.render(scene, camera);
       }
     
@@ -366,9 +400,11 @@
         updatePhysics();
 
         updateAnimation();
+
+        flame.update();
         
-        //renderer.render(scene, camera);
-        composer.render();
+        renderer.render(scene, camera);
+        //composer.render();
       }
 
       function updateAnimation() {
