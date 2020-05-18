@@ -38,7 +38,7 @@
 
       #hero {
         width: 100%;
-        height: 60vh;
+        height: 100%;
         background: black;
       }
     </style>
@@ -53,8 +53,12 @@
     <script type="module">
       import * as THREE from "./threejs/build/three.module.js";
       import { GLTFLoader } from "./threejs/examples/jsm/loaders/GLTFLoader.js";
+      import { EffectComposer } from './threejs/examples/jsm/postprocessing/EffectComposer.js';
+      import { RenderPass } from './threejs/examples/jsm/postprocessing/RenderPass.js';
+			import { UnrealBloomPass } from './threejs/examples/jsm/postprocessing/UnrealBloomPass.js';
     
       var container, stats, controls, spotlight, target, floor, hole, character, world, mixer, clips = [], holeClip;
+      var composer;
       var clock = new THREE.Clock();
       var characters = [], physicsBoxes = [];
       var timeStep = 1/60;
@@ -162,10 +166,18 @@
         renderer = new THREE.WebGLRenderer( {antialias: true} );
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(hero.offsetWidth, hero.offsetHeight);
-        renderer.gammaOutput = true;
-        renderer.shadowMapEnabled = true;
-        renderer.shadowMapType = THREE.PCFShadowMap;
+        renderer.outputEncoding = THREE.GammaEncoding;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFShadowMap;
         container.appendChild(renderer.domElement);
+
+        // post-processing
+        var renderScene = new RenderPass(scene, camera);
+        var bloomPass = new UnrealBloomPass(new THREE.Vector2(hero.clientWidth, hero.clientHeight), 2.2, 1.0, 0.4);
+
+        composer = new EffectComposer(renderer);
+        composer.addPass(renderScene);
+        composer.addPass(bloomPass);
     
         // Orbit controls
         /*controls = new OrbitControls( camera, renderer.domElement );
@@ -311,7 +323,8 @@
         camera.updateProjectionMatrix();
     
         renderer.setSize(hero.offsetWidth, hero.offsetHeight);
-        renderer.render(scene, camera);
+        composer.setSize(hero.offsetWidth, hero.offsetHeight);
+        //renderer.render(scene, camera);
       }
     
       function update() {
@@ -354,7 +367,8 @@
 
         updateAnimation();
         
-        renderer.render(scene, camera);
+        //renderer.render(scene, camera);
+        composer.render();
       }
 
       function updateAnimation() {
