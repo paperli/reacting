@@ -49,13 +49,13 @@
   </head>
   <body>
     <div id="hero"> </div>
+    <script src="./threejs/build/three.min.js"></script>
     <script src="./lib/cannon.min.js"></script>
     <script type="module">
-      import * as THREE from "./threejs/build/three.module.js";
       import { GLTFLoader } from "./threejs/examples/jsm/loaders/GLTFLoader.js";
       import { EffectComposer } from './threejs/examples/jsm/postprocessing/EffectComposer.js';
       import { RenderPass } from './threejs/examples/jsm/postprocessing/RenderPass.js';
-			import { UnrealBloomPass } from './threejs/examples/jsm/postprocessing/UnrealBloomPass.js';
+      import { UnrealBloomPass } from './threejs/examples/jsm/postprocessing/UnrealBloomPass.js';
     
       var container, stats, controls, spotlight, target, floor, hole, character, world, mixer, clips = [], holeClip;
       var composer;
@@ -172,12 +172,12 @@
         container.appendChild(renderer.domElement);
 
         // post-processing
-        var renderScene = new RenderPass(scene, camera);
+        /*var renderScene = new RenderPass(scene, camera);
         var bloomPass = new UnrealBloomPass(new THREE.Vector2(hero.clientWidth, hero.clientHeight), 2.2, 1.0, 0.4);
 
         composer = new EffectComposer(renderer);
         composer.addPass(renderScene);
-        composer.addPass(bloomPass);
+        composer.addPass(bloomPass);*/
     
         // Orbit controls
         /*controls = new OrbitControls( camera, renderer.domElement );
@@ -323,7 +323,7 @@
         camera.updateProjectionMatrix();
     
         renderer.setSize(hero.offsetWidth, hero.offsetHeight);
-        composer.setSize(hero.offsetWidth, hero.offsetHeight);
+        //composer.setSize(hero.offsetWidth, hero.offsetHeight);
         //renderer.render(scene, camera);
       }
     
@@ -367,8 +367,8 @@
 
         updateAnimation();
         
-        //renderer.render(scene, camera);
-        composer.render();
+        renderer.render(scene, camera);
+        //composer.render();
       }
 
       function updateAnimation() {
