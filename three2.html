@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <style>
+      body,html {
+        width: 100%;
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #hero {
+        width: 100%;
+        height: 100%;
+        background: black;
+      }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <title>3D</title>
+  </head>
+  <body>
+    <div id="hero"> </div>
+    <script src="./threejs/build/three.min.js"></script>
+    <script src="./lib/partykals.js"></script>
+    <script src="./lib/cannon.min.js"></script>
+    <script type="module">
+      import { GLTFLoader } from "./threejs/examples/jsm/loaders/GLTFLoader.js";
+      /*import { EffectComposer } from './threejs/examples/jsm/postprocessing/EffectComposer.js';
+      import { RenderPass } from './threejs/examples/jsm/postprocessing/RenderPass.js';
+      import { UnrealBloomPass } from './threejs/examples/jsm/postprocessing/UnrealBloomPass.js';*/
+    
+      var container, stats, controls, spotlight, target, floor, hole, character, world, mixer, clips = [], holeClip;
+      //var composer;
+
+      // particles system flame
+      var flame;
+      // TOFIX: merge flame clips to one clip/action
+      var flameClips = [];
+
+      var clock = new THREE.Clock();
+      var characters = [], physicsBoxes = [];
+      var timeStep = 1/60;
+      const FORCE = 12;
+      
+      // push state
+      const pushState = {
+        NO_PUSH: 0,
+        SHALL_PUSH: 1,
+        WILL_PUSH: 2,
+        DID_PUSH: 3
+      };
+      var currentPushState = pushState.NO_PUSH;
+
+      var camera, scene, renderer;
+      var raycaster = new THREE.Raycaster();
+      var mouse = new THREE.Vector2( 0, 0 );
+      const BACKGROUND_COLOR = 0x000000;
+      const FOG_NEAR = 6;
+      const FOG_FAR = 16;
+      const FOG_COLOR = BACKGROUND_COLOR;
+      const CAMERA_LOOK_AT = new THREE.Vector3(0, 0, 0);
+
+      var hero = document.getElementById('hero');
+    
+      init();
+    
+      function init() {
+        container = document.createElement('div');
+        hero.appendChild(container);
+    
+        camera = new THREE.PerspectiveCamera( 36, hero.offsetWidth / hero.offsetHeight, 0.25, 100);
+        camera.position.set(10.2075, 6, 10.2075);
+        camera.lookAt(CAMERA_LOOK_AT);
+
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(BACKGROUND_COLOR);
+        //scene.fog = new THREE.Fog(FOG_COLOR, FOG_NEAR, FOG_FAR);
+        //scene.fog = new THREE.FogExp2(FOG_COLOR, 0.08);
+
+        spotlight = new THREE.SpotLight( 0xFFCB93 );
+        spotlight.position.set(10.2075, 20, 10.2075);
+        spotlight.distance = 0;
+        spotlight.decay = 2;
+        spotlight.angle = Math.PI / 16;
+        spotlight.intensity = 1;
+        spotlight.penumbra = 1;
+        spotlight.castShadow = true;
+        spotlight.shadow.mapSize.width = 1024;
+        spotlight.shadow.mapSize.height = 1024;
+
+        spotlight.shadow.camera.near = 0.5;
+        spotlight.shadow.camera.far = 500;
+        spotlight.shadow.bias = -0.0001;
+        scene.add(spotlight);
+
+        target = new THREE.Object3D();
+        target.position.set(0, 0, 0);
+        scene.add(target);
+        spotlight.target = target;
+
+        /*var planeGeo = new THREE.PlaneGeometry( 50, 50, 2, 2 );
+        var planeMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
+        floor = new THREE.Mesh( planeGeo, planeMaterial);
+        floor.rotateX(-Math.PI / 2);
+        floor.position.set(0, -0.01, 0);
+        scene.add(floor);*/
+
+        var loader = new GLTFLoader().setPath("models/");
+        loader.load('butthole.gltf', function(gltf) {
+          // load successful
+          var light_count = 0;
+          var model = gltf.scene;
+          /*model.traverse(function(child) {
+            if (child.isLight) {
+              child.visible = false;
+            } else if (child.isMesh) {
+              if (child.name == "Floor") {
+                child.receiveShadow = true;
+                floor = child;
+              }
+              
+              if (child.parent.name == "Puppet") {
+                // character, cast shadow
+                child.castShadow = true;
+              }
+            }
+
+            if (child.name == "Puppet") {
+              character = child;
+              //child.position.set(1.680, 0, -1.417);
+            }
+          });*/
+
+          // handle animation clips
+          mixer = new THREE.AnimationMixer(model);
+          clips = gltf.animations;
+          console.log(clips);
+
+          scene.add(model);
+          update();
+        });
+    
+        renderer = new THREE.WebGLRenderer( {antialias: true} );
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(hero.offsetWidth, hero.offsetHeight);
+        renderer.outputEncoding = THREE.GammaEncoding;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFShadowMap;
+        container.appendChild(renderer.domElement);
+
+        window.addEventListener('resize', onWindowResize, false);
+        window.addEventListener('orientationchange', onWindowResize, false);
+      }
+    
+      function onWindowResize() {
+        var hero = document.getElementById('hero');
+        // Below code will cause distortion on canvas
+        camera.aspect = hero.offsetWidth / hero.offsetHeight;
+        camera.updateProjectionMatrix();
+    
+        renderer.setSize(hero.offsetWidth, hero.offsetHeight);
+        //composer.setSize(hero.offsetWidth, hero.offsetHeight);
+        //renderer.render(scene, camera);
+      }
+    
+      function update() {
+        requestAnimationFrame(update);
+
+        updateAnimation();
+
+        //flame.update();
+        
+        renderer.render(scene, camera);
+        //composer.render();
+      }
+
+      function updateAnimation() {
+        if (mixer != undefined && clips.length > 0) {
+          var delta = clock.getDelta();
+          mixer.update(delta);
+        }
+      }
+    </script>
+  </body>
+</html>

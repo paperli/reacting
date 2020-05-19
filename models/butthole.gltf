@@ -472,9 +472,345 @@
                         "node" : 6,
                         "path" : "scale"
                     }
+                },
+                {
+                    "sampler" : 3,
+                    "target" : {
+                        "node" : 7,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 4,
+                    "target" : {
+                        "node" : 7,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 5,
+                    "target" : {
+                        "node" : 7,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 6,
+                    "target" : {
+                        "node" : 8,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 7,
+                    "target" : {
+                        "node" : 8,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 8,
+                    "target" : {
+                        "node" : 8,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 9,
+                    "target" : {
+                        "node" : 9,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 10,
+                    "target" : {
+                        "node" : 9,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 11,
+                    "target" : {
+                        "node" : 9,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 12,
+                    "target" : {
+                        "node" : 10,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 13,
+                    "target" : {
+                        "node" : 10,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 14,
+                    "target" : {
+                        "node" : 10,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 15,
+                    "target" : {
+                        "node" : 11,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 16,
+                    "target" : {
+                        "node" : 11,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 17,
+                    "target" : {
+                        "node" : 11,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 18,
+                    "target" : {
+                        "node" : 12,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 19,
+                    "target" : {
+                        "node" : 12,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 20,
+                    "target" : {
+                        "node" : 12,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 21,
+                    "target" : {
+                        "node" : 13,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 22,
+                    "target" : {
+                        "node" : 13,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 23,
+                    "target" : {
+                        "node" : 13,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 24,
+                    "target" : {
+                        "node" : 15,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 25,
+                    "target" : {
+                        "node" : 15,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 26,
+                    "target" : {
+                        "node" : 15,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 27,
+                    "target" : {
+                        "node" : 16,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 28,
+                    "target" : {
+                        "node" : 16,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 29,
+                    "target" : {
+                        "node" : 16,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 30,
+                    "target" : {
+                        "node" : 17,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 31,
+                    "target" : {
+                        "node" : 17,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 32,
+                    "target" : {
+                        "node" : 17,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 33,
+                    "target" : {
+                        "node" : 18,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 34,
+                    "target" : {
+                        "node" : 18,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 35,
+                    "target" : {
+                        "node" : 18,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 36,
+                    "target" : {
+                        "node" : 19,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 37,
+                    "target" : {
+                        "node" : 19,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 38,
+                    "target" : {
+                        "node" : 19,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 39,
+                    "target" : {
+                        "node" : 20,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 40,
+                    "target" : {
+                        "node" : 20,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 41,
+                    "target" : {
+                        "node" : 20,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 42,
+                    "target" : {
+                        "node" : 21,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 43,
+                    "target" : {
+                        "node" : 21,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 44,
+                    "target" : {
+                        "node" : 21,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 45,
+                    "target" : {
+                        "node" : 22,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 46,
+                    "target" : {
+                        "node" : 22,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 47,
+                    "target" : {
+                        "node" : 22,
+                        "path" : "scale"
+                    }
+                },
+                {
+                    "sampler" : 48,
+                    "target" : {
+                        "node" : 14,
+                        "path" : "translation"
+                    }
+                },
+                {
+                    "sampler" : 49,
+                    "target" : {
+                        "node" : 14,
+                        "path" : "rotation"
+                    }
+                },
+                {
+                    "sampler" : 50,
+                    "target" : {
+                        "node" : 14,
+                        "path" : "scale"
+                    }
                 }
             ],
-            "name" : "Flame.000",
+            "name" : "FlameAnimation",
             "samplers" : [
                 {
                     "input" : 74,
@@ -490,35 +826,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 77
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 7,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 7,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 7,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.001",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -533,35 +841,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 80
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 8,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 8,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 8,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.002",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -576,35 +856,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 83
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 9,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 9,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 9,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.003",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -619,35 +871,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 86
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 10,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 10,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 10,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.004",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -662,35 +886,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 89
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 11,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 11,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 11,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.005",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -705,35 +901,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 92
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 12,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 12,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 12,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.006",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -748,35 +916,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 95
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 13,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 13,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 13,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.007",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -791,35 +931,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 98
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 15,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 15,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 15,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.009",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -834,35 +946,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 101
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 16,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 16,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 16,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.010",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -877,35 +961,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 104
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 17,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 17,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 17,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.011",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -920,35 +976,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 107
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 18,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 18,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 18,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.012",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -963,35 +991,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 110
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 19,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 19,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 19,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.013",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -1006,35 +1006,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 113
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 20,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 20,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 20,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.014",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -1049,35 +1021,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 116
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 21,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 21,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 21,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.015",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -1092,35 +1036,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 119
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 22,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 22,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 22,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.016",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",
@@ -1135,35 +1051,7 @@
                     "input" : 74,
                     "interpolation" : "LINEAR",
                     "output" : 122
-                }
-            ]
-        },
-        {
-            "channels" : [
-                {
-                    "sampler" : 0,
-                    "target" : {
-                        "node" : 14,
-                        "path" : "translation"
-                    }
                 },
-                {
-                    "sampler" : 1,
-                    "target" : {
-                        "node" : 14,
-                        "path" : "rotation"
-                    }
-                },
-                {
-                    "sampler" : 2,
-                    "target" : {
-                        "node" : 14,
-                        "path" : "scale"
-                    }
-                }
-            ],
-            "name" : "Flame.008",
-            "samplers" : [
                 {
                     "input" : 74,
                     "interpolation" : "LINEAR",

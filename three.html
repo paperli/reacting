@@ -62,9 +62,8 @@
       //var composer;
 
       // particles system flame
-      var flame;
-      // TOFIX: merge flame clips to one clip/action
-      var flameClips = [];
+      //var flame;
+      var flameClip;
 
       var clock = new THREE.Clock();
       var characters = [], physicsBoxes = [];
@@ -165,12 +164,9 @@
           mixer = new THREE.AnimationMixer(model);
           clips = gltf.animations;
           holeClip = THREE.AnimationClip.findByName(clips, 'HoleAction');
-          for (var i = 0; i < 17; i++) {
-            var clip = THREE.AnimationClip.findByName(clips, `Flame.${String(i).padStart(3, 0)}`);
-            flameClips.push(clip);
-            var clipAction = mixer.clipAction(clip).setLoop(THREE.LoopRepeat);
-            clipAction.play();
-          }
+          flameClips = THREE.AnimationClip.findByName(clips, 'FlameAnimation');
+          var clipAction = mixer.clipAction(flameClips).setLoop(THREE.LoopRepeat);
+          clipAction.play();
 
           scene.add(model);
           update();
