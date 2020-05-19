@@ -64,6 +64,7 @@
       // particles system flame
       //var flame;
       var flameClip;
+      var flameAnimationAction;
 
       var clock = new THREE.Clock();
       var characters = [], physicsBoxes = [];
@@ -78,6 +79,14 @@
         DID_PUSH: 3
       };
       var currentPushState = pushState.NO_PUSH;
+
+      const flameAnimationState = {
+        WILL_PLAY: 0,
+        IS_LOOPING: 1,
+        WILL_STOP: 2,
+        DID_STOP: 3
+      }
+      var currentFlameAnimationState = flameAnimationState.WILL_PLAY;
 
       var camera, scene, renderer;
       var raycaster = new THREE.Raycaster();
@@ -164,9 +173,9 @@
           mixer = new THREE.AnimationMixer(model);
           clips = gltf.animations;
           holeClip = THREE.AnimationClip.findByName(clips, 'HoleAction');
-          flameClips = THREE.AnimationClip.findByName(clips, 'FlameAnimation');
-          var clipAction = mixer.clipAction(flameClips).setLoop(THREE.LoopRepeat);
-          clipAction.play();
+          flameClip = THREE.AnimationClip.findByName(clips, 'FlameAnimation');
+          flameAnimationAction = mixer.clipAction(flameClip).setLoop(THREE.LoopRepeat);
+          playFlameAnimation();
 
           scene.add(model);
           update();
@@ -364,6 +373,18 @@
         //composer.setSize(hero.offsetWidth, hero.offsetHeight);
         //renderer.render(scene, camera);
       }
+
+      function playFlameAnimation() {
+        currentFlameAnimationState = flameAnimationState.IS_LOOPING;
+        flameAnimationAction.stopFading();
+        flameAnimationAction.reset();
+        flameAnimationAction.play();
+      }
+
+      function stopFlameAnimation() {
+        currentFlameAnimationState = flameAnimationState.DID_STOP;
+        flameAnimationAction.fadeOut(1.0);
+      }
     
       function update() {
         requestAnimationFrame(update);
@@ -380,11 +401,19 @@
               if (currentPushState == pushState.NO_PUSH) {
                 currentPushState = pushState.SHALL_PUSH;
               }
+
+              if (currentFlameAnimationState == flameAnimationState.IS_LOOPING) {
+                currentFlameAnimationState = flameAnimationState.WILL_STOP;
+              }
             } else {
               // hitting floor
               if (currentPushState == pushState.DID_PUSH) {
                 // change push state only when the stuff is pushed
                 currentPushState = pushState.NO_PUSH;
+              }
+              // set WILL_PLAY when the flame is not playing
+              if (currentFlameAnimationState != flameAnimationState.IS_LOOPING) {
+                currentFlameAnimationState = flameAnimationState.WILL_PLAY;
               }
             }
             
@@ -394,11 +423,22 @@
               // change push state only when the stuff is pushed
               currentPushState = pushState.NO_PUSH;
             }
+            // set WILL_PLAY when the flame is not playing
+            if (currentFlameAnimationState != flameAnimationState.IS_LOOPING) {
+              currentFlameAnimationState = flameAnimationState.WILL_PLAY;
+            }
           }
         }
 
         if (currentPushState == pushState.SHALL_PUSH) {
           pushing();
+        }
+
+        // update flame animation
+        if (currentFlameAnimationState == flameAnimationState.WILL_PLAY) {
+          playFlameAnimation();
+        } else if (currentFlameAnimationState == flameAnimationState.WILL_STOP) {
+          stopFlameAnimation();
         }
 
         updatePhysics();
