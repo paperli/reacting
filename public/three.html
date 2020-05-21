@@ -62,6 +62,7 @@
       //var composer;
       var hole, character, floor, signBox, bulbs1, bulbs2, bulbs3, signBoxTexOff, signBoxTex1, signBoxTex2, signBoxTex3;
       var currentNeonStage = 0;
+      var timer;
       var signBoxMat, bulbs1Mat, bulbs2Mat, bulbs3Mat;
       const neonAnimationState = {
         OFF: 0,
@@ -333,9 +334,12 @@
 
       function pushing() {
         currentPushState = pushState.WILL_PUSH;
+        if (timer != undefined) {
+          clearTimeout(timer);
+        }
         if (character != undefined && holeClip != undefined && mixer != undefined) {
           
-          setTimeout(function() {
+          timer = setTimeout(function() {
             
             // add character
             var c = character.clone();
