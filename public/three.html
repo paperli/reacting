@@ -58,8 +58,18 @@
       import { RenderPass } from './threejs/examples/jsm/postprocessing/RenderPass.js';
       import { UnrealBloomPass } from './threejs/examples/jsm/postprocessing/UnrealBloomPass.js';*/
     
-      var container, stats, controls, spotlight, target, floor, hole, character, world, mixer, clips = [], holeClip;
+      var container, stats, controls, spotlight, target, world, mixer, clips = [], holeClip;
       //var composer;
+      var hole, character, floor, signBox, bulbs1, bulbs2, bulbs3, signBoxTexOff, signBoxTex1, signBoxTex2, signBoxTex3;
+      var currentNeonStage = 0;
+      var signBoxMat, bulbs1Mat, bulbs2Mat, bulbs3Mat;
+      const neonAnimationState = {
+        OFF: 0,
+        BULBS1: 1,
+        BULBS2: 2,
+        BULBS3: 3
+      };
+      const NEON_ANIMATION_KEYS = [0, 30, 60, 84, 90, 99, 105, 168, 198]; // 60 fps
 
       // particles system flame
       //var flame;
@@ -98,6 +108,7 @@
       const CAMERA_LOOK_AT = new THREE.Vector3(0, 0, 0);
 
       var hero = document.getElementById('hero');
+      var currentFrame = 0;
     
       init();
       initCannon();
@@ -136,12 +147,24 @@
         scene.add(target);
         spotlight.target = target;
 
+        signBoxTexOff = new THREE.TextureLoader().load("models/textures/SignMat.Base0.png");
+        signBoxTex1 = new THREE.TextureLoader().load("models/textures/SignMat.Base1.png");
+        signBoxTex2 = new THREE.TextureLoader().load("models/textures/SignMat.Base2.png");
+        signBoxTex3 = new THREE.TextureLoader().load("models/textures/SignMat.Base3.png");
+        
+        signBoxMat = new THREE.MeshBasicMaterial({map: signBoxTex1});
+        bulbs1Mat = new THREE.MeshLambertMaterial({ emissive: new THREE.Color(0xFFD751), emissiveIntensity: 3.0});
+        bulbs2Mat = new THREE.MeshLambertMaterial({ emissive: new THREE.Color(0xFFD751), emissiveIntensity: 0.0});
+        bulbs3Mat = new THREE.MeshLambertMaterial({ emissive: new THREE.Color(0xFFD751), emissiveIntensity: 0.0});
+
         /*var planeGeo = new THREE.PlaneGeometry( 50, 50, 2, 2 );
         var planeMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
         floor = new THREE.Mesh( planeGeo, planeMaterial);
         floor.rotateX(-Math.PI / 2);
         floor.position.set(0, -0.01, 0);
         scene.add(floor);*/
+
+
 
         var loader = new GLTFLoader().setPath("models/");
         loader.load('butthole.gltf', function(gltf) {
@@ -152,18 +175,37 @@
             if (child.isLight) {
               child.visible = false;
             } else if (child.isMesh) {
-              if (child.name == "Floor") {
-                child.receiveShadow = true;
-                floor = child;
+              switch (child.name) {
+                case "SignBox":
+                  signBox = child;
+                  signBox.material = signBoxMat;
+                  break;
+                case "Bulbs1":
+                  bulbs1 = child;
+                  bulbs1.material = bulbs1Mat;
+                  break;
+                case "Bulbs2":
+                  bulbs2 = child;
+                  bulbs2.material = bulbs2Mat;
+                  break;
+                case "Bulbs3":
+                  bulbs3 = child;
+                  bulbs3.material = bulbs3Mat;
+                  break;
+                case "Floor":
+                  floor = child;
+                  break;
+                default:
+                  break;
               }
               
-              if (child.parent.name == "Puppet") {
+              if (child.parent.name === "Puppet") {
                 // character, cast shadow
                 child.castShadow = true;
               }
             }
 
-            if (child.name == "Puppet") {
+            if (child.name === "Puppet") {
               character = child;
               //child.position.set(1.680, 0, -1.417);
             }
@@ -385,9 +427,80 @@
         currentFlameAnimationState = flameAnimationState.DID_STOP;
         flameAnimationAction.fadeOut(1.0);
       }
+
+      function playNeonAnimation() {
+        if (currentFrame == NEON_ANIMATION_KEYS[currentNeonStage]) {
+          // play animation
+          switch (currentNeonStage) {
+            case 0:
+              neonAnimationPractice(neonAnimationState.BULBS1);
+              break;
+            case 1:
+              neonAnimationPractice(neonAnimationState.BULBS2);
+              break;
+            case 2:
+              neonAnimationPractice(neonAnimationState.BULBS3);
+              break;
+            case 3:
+              neonAnimationPractice(neonAnimationState.OFF);
+              break;
+            case 4:
+              neonAnimationPractice(neonAnimationState.BULBS3);
+              break;
+            case 5:
+              neonAnimationPractice(neonAnimationState.OFF);
+              break;
+            case 6:
+              neonAnimationPractice(neonAnimationState.BULBS3);
+              break;
+            case 7:
+              neonAnimationPractice(neonAnimationState.OFF);
+              break;
+            case 8:
+              neonAnimationPractice(neonAnimationState.BULBS1);
+              break;
+            default:
+              break;
+          }
+          currentNeonStage++;
+        }
+        if (currentNeonStage === NEON_ANIMATION_KEYS.length) {
+          //reset
+          currentNeonStage = 0;
+          currentFrame = 0;
+        } else {
+          currentFrame++;
+        }
+      }
+
+      function neonAnimationPractice(state) {
+        switch (state) {
+          case neonAnimationState.OFF:
+            signBox.material.map = signBoxTexOff;
+            bulbs1Mat.emissiveIntensity = bulbs2Mat.emissiveIntensity = bulbs3Mat.emissiveIntensity = 0.0;
+            break;
+          case neonAnimationState.BULBS1:
+            signBox.material.map = signBoxTex1;
+            bulbs1Mat.emissiveIntensity = 1.0;
+            bulbs2Mat.emissiveIntensity = bulbs3Mat.emissiveIntensity = 0.0;
+            break;
+          case neonAnimationState.BULBS2:
+            signBox.material.map = signBoxTex2;
+            bulbs1Mat.emissiveIntensity = bulbs2Mat.emissiveIntensity = 1.0;
+            bulbs3Mat.emissiveIntensity = 0.0;
+            break;
+          case neonAnimationState.BULBS3:
+            signBox.material.map = signBoxTex3;
+            bulbs1Mat.emissiveIntensity = bulbs2Mat.emissiveIntensity = bulbs3Mat.emissiveIntensity = 1.0;
+            break;
+          default:
+            break;
+        }
+      }
     
       function update() {
         requestAnimationFrame(update);
+        playNeonAnimation();
 
         if (floor != undefined) {
           raycaster.setFromCamera(mouse, camera);
