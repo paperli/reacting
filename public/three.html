@@ -70,7 +70,9 @@
         BULBS2: 2,
         BULBS3: 3
       };
-      const NEON_ANIMATION_KEYS = [0, 30, 60, 84, 90, 99, 105, 168, 198]; // 60 fps
+      const NEON_ANIMATION_KEYS = [0, 30, 60, 84, 90, 99, 105, 198, 258]; // 60 fps
+      const BULB_ON_COLOR = new THREE.Color(0xFFD751);
+      const BULB_OFF_COLOR = new THREE.Color(0x000000);
 
       // particles system flame
       //var flame;
@@ -154,9 +156,9 @@
         signBoxTex3 = new THREE.TextureLoader().load("models/textures/SignMat.Base3.png");
         
         signBoxMat = new THREE.MeshBasicMaterial({map: signBoxTex1});
-        bulbs1Mat = new THREE.MeshLambertMaterial({ emissive: new THREE.Color(0xFFD751), emissiveIntensity: 3.0});
-        bulbs2Mat = new THREE.MeshLambertMaterial({ emissive: new THREE.Color(0xFFD751), emissiveIntensity: 0.0});
-        bulbs3Mat = new THREE.MeshLambertMaterial({ emissive: new THREE.Color(0xFFD751), emissiveIntensity: 0.0});
+        bulbs1Mat = new THREE.MeshBasicMaterial({color: BULB_ON_COLOR});
+        bulbs2Mat = new THREE.MeshBasicMaterial({color: BULB_OFF_COLOR});
+        bulbs3Mat = new THREE.MeshBasicMaterial({color: BULB_OFF_COLOR});
 
         /*var planeGeo = new THREE.PlaneGeometry( 50, 50, 2, 2 );
         var planeMaterial = new THREE.MeshBasicMaterial({color: 0xffffff});
@@ -176,8 +178,9 @@
             if (child.isLight) {
               child.visible = false;
             } else if (child.isMesh) {
+              console.log(child.name);
               switch (child.name) {
-                case "SignBox":
+                case "SignBox_0":
                   signBox = child;
                   signBox.material = signBoxMat;
                   break;
@@ -481,21 +484,21 @@
         switch (state) {
           case neonAnimationState.OFF:
             signBox.material.map = signBoxTexOff;
-            bulbs1Mat.emissiveIntensity = bulbs2Mat.emissiveIntensity = bulbs3Mat.emissiveIntensity = 0.0;
+            bulbs1Mat.color = bulbs2Mat.color = bulbs3Mat.color = BULB_OFF_COLOR;
             break;
           case neonAnimationState.BULBS1:
             signBox.material.map = signBoxTex1;
-            bulbs1Mat.emissiveIntensity = 1.0;
-            bulbs2Mat.emissiveIntensity = bulbs3Mat.emissiveIntensity = 0.0;
+            bulbs1Mat.color = BULB_ON_COLOR;
+            bulbs2Mat.color = bulbs3Mat.color = BULB_OFF_COLOR;
             break;
           case neonAnimationState.BULBS2:
             signBox.material.map = signBoxTex2;
-            bulbs1Mat.emissiveIntensity = bulbs2Mat.emissiveIntensity = 1.0;
-            bulbs3Mat.emissiveIntensity = 0.0;
+            bulbs1Mat.color = bulbs2Mat.color = BULB_ON_COLOR;
+            bulbs3Mat.color = BULB_OFF_COLOR;
             break;
           case neonAnimationState.BULBS3:
             signBox.material.map = signBoxTex3;
-            bulbs1Mat.emissiveIntensity = bulbs2Mat.emissiveIntensity = bulbs3Mat.emissiveIntensity = 1.0;
+            bulbs1Mat.color = bulbs2Mat.color = bulbs3Mat.color = BULB_ON_COLOR;
             break;
           default:
             break;
