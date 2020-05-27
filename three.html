@@ -60,7 +60,8 @@
     
       var container, stats, controls, spotlight, target, world, mixer, clips = [], holeClip;
       //var composer;
-      var hole, character, floor, signBox, bulbs1, bulbs2, bulbs3, signBoxTexOff, signBoxTex1, signBoxTex2, signBoxTex3;
+      var hole, floor, signBox, bulbs1, bulbs2, bulbs3, signBoxTexOff, signBoxTex1, signBoxTex2, signBoxTex3;
+      var puppets = []; // throw-out puppet pool
       var currentNeonStage = 0;
       var timer;
       var signBoxMat, bulbs1Mat, bulbs2Mat, bulbs3Mat;
@@ -80,7 +81,7 @@
       var flameAnimationAction;
 
       var clock = new THREE.Clock();
-      var characters = [], physicsBoxes = [];
+      var characters = [], physicsBoxes = []; // characters saves the puppets is throwing out
       var timeStep = 1/60;
       const FORCE = 12;
       
@@ -167,8 +168,6 @@
         floor.position.set(0, -0.01, 0);
         scene.add(floor);*/
 
-
-
         var loader = new GLTFLoader().setPath("models/");
         loader.load('butthole.gltf', function(gltf) {
           // load successful
@@ -178,7 +177,6 @@
             if (child.isLight) {
               child.visible = false;
             } else if (child.isMesh) {
-              console.log(child.name);
               switch (child.name) {
                 case "SignBox_0":
                   signBox = child;
@@ -197,22 +195,22 @@
                   bulbs3.material = bulbs3Mat;
                   break;
                 case "Floor":
+                  child.receiveShadow = true;
                   floor = child;
                   break;
                 default:
                   break;
               }
-              
-              if (child.parent.name === "Puppet") {
-                // character, cast shadow
-                child.castShadow = true;
-              }
             }
 
-            if (child.name === "Puppet") {
-              character = child;
+            if (child.name === "Puppet" || child.name === "PuppetTV") {
+              child.visible = false;
+              child.castShadow = true;
+              puppets.push(child);
               //child.position.set(1.680, 0, -1.417);
             }
+
+            
           });
 
           // handle animation clips
@@ -283,7 +281,7 @@
         window.addEventListener('orientationchange', onWindowResize, false);
       }
 
-      function newPhysicsBody() {
+      function newPhysicsBody(characterPosition) {
         //var shape = new CANNON.Box(new CANNON.Vec3(0.5,1.2,0.5));
         var shape = new CANNON.Cylinder(0.6, 0.2, 1.2, 16);
         var quat = new CANNON.Quaternion(0.5, 0, 0, 0.5);
@@ -292,10 +290,7 @@
         var body = new CANNON.Body({
             mass: 10
         });
-        var pos = new CANNON.Vec3(0, 0.1, 0);
-        if (character != undefined) {
-          pos = new CANNON.Vec3(character.position.x, 0.1, character.position.z);
-        }
+        var pos = new CANNON.Vec3(characterPosition.x, 0.1, characterPosition.z);
         body.addShape(shape, new CANNON.Vec3(0, 0.6, 0), quat);
         body.position.set(pos.x, pos.y, pos.z);
         //body.velocity.set(0, 1, 0);
@@ -340,18 +335,21 @@
         if (timer != undefined) {
           clearTimeout(timer);
         }
-        if (character != undefined && holeClip != undefined && mixer != undefined) {
+        if (puppets.length > 0 && holeClip != undefined && mixer != undefined) {
           
           timer = setTimeout(function() {
             
-            // add character
-            var c = character.clone();
+            // add puppet
+            var randomIndex = Math.floor(Math.random() * puppets.length);
+            console.log(`random index: ${randomIndex}`);
+            var c = puppets[randomIndex].clone();
+            c.visible = true;
             c.castShadow = true;
             scene.add(c);
             characters.push(c);
 
             // add physics body
-            var b = newPhysicsBody();
+            var b = newPhysicsBody(c.position);
             world.addBody(b);
             physicsBoxes.push(b);
 
