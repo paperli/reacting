@@ -62,6 +62,12 @@
       //var composer;
       var hole, floor, signBox, bulbs1, bulbs2, bulbs3, signBoxTexOff, signBoxTex1, signBoxTex2, signBoxTex3;
       var puppets = []; // throw-out puppet pool
+      const PUPPET_COLLIDAR_SIZES = {
+        "Puppet": {top: 0.6, bottom: 0.2, height: 1.2},
+        "PuppetTV": {top: 0.6, bottom: 0.2, height: 1.2},
+        "Bear": {top: 0.5, bottom: 0.5, height: 0.56},
+        "Model": {top: 0.5, bottom: 0.4, height: 0.9}
+      }
       var currentNeonStage = 0;
       var timer;
       var signBoxMat, bulbs1Mat, bulbs2Mat, bulbs3Mat;
@@ -203,13 +209,12 @@
               }
             }
 
-            if (child.name === "Puppet" || child.name === "PuppetTV") {
+            if (child.name === "Puppet" || child.name === "PuppetTV" || child.name === "Bear" || child.name === "Model") {
               child.visible = false;
               child.castShadow = true;
               puppets.push(child);
-              //child.position.set(1.680, 0, -1.417);
+              child.position.set(1.680, -1.7, -1.417);
             }
-
             
           });
 
@@ -281,9 +286,10 @@
         window.addEventListener('orientationchange', onWindowResize, false);
       }
 
-      function newPhysicsBody(characterPosition) {
+      function newPhysicsBody(characterPosition, characterName) {
         //var shape = new CANNON.Box(new CANNON.Vec3(0.5,1.2,0.5));
-        var shape = new CANNON.Cylinder(0.6, 0.2, 1.2, 16);
+        const size = PUPPET_COLLIDAR_SIZES[characterName];
+        var shape = new CANNON.Cylinder(size.top, size.bottom, size.height, 16);
         var quat = new CANNON.Quaternion(0.5, 0, 0, 0.5);
         quat.normalize();
         
@@ -291,7 +297,7 @@
             mass: 10
         });
         var pos = new CANNON.Vec3(characterPosition.x, 0.1, characterPosition.z);
-        body.addShape(shape, new CANNON.Vec3(0, 0.6, 0), quat);
+        body.addShape(shape, new CANNON.Vec3(0, size.height/2, 0), quat);
         body.position.set(pos.x, pos.y, pos.z);
         //body.velocity.set(0, 1, 0);
         //body.angularVelocity.set(0,10,0);
@@ -349,7 +355,7 @@
             characters.push(c);
 
             // add physics body
-            var b = newPhysicsBody(c.position);
+            var b = newPhysicsBody(c.position, c.name);
             world.addBody(b);
             physicsBoxes.push(b);
 
