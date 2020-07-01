@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title></title>
+		<meta charset="utf-8">
+		<meta name="generator" content="Three.js Editor">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: sans-serif;
+				font-size: 11px;
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body ontouchstart="">
+		<script src="./js/HelioWebXRPolyfill.js"></script>
+
+		<script type="module">
+
+			import * as THREE from './js/three.module.js';
+			import { APP } from './js/app.js';
+			import { VRButton } from './js/VRButton.js';
+
+			window.THREE = THREE; // Used by APP Scripts.
+			window.VRButton = VRButton; // Used by APP Scripts.
+
+			var loader = new THREE.FileLoader();
+			loader.load( 'app.json', function ( text ) {
+
+				var player = new APP.Player();
+				player.load( JSON.parse( text ) );
+				player.setSize( window.innerWidth, window.innerHeight );
+				player.play();
+
+				document.body.appendChild( player.dom );
+
+				window.addEventListener( 'resize', function () {
+
+					player.setSize( window.innerWidth, window.innerHeight );
+
+				} );
+
+			} );
+
+			function onMouseMove(event) {
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			}
+
+			function onSingleTouchMove(event) {
+				if (event.touches.length > 1) {
+					return;
+				}
+
+				event.preventDefault();
+				mouse.x = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+				mouse.y = - (event.touches[0].clientY / window.innerHeight) * 2 + 1;
+			}
+
+			function step(value, input_range, output_range) {
+				// input_range: [min, max] input
+				// output_range: [min, max] output
+				const o = output_range[0] + (value - input_range[0]) * (output_range[1] - output_range[0]) / (input_range[1] - input_range[0]);
+				return Math.min( Math.max(o ,output_range[0]), output_range[1])
+			}
+
+			function animate() {
+				requestAnimationFrame(animate);
+			}
+
+			window.addEventListener('mousemove', onMouseMove, false);
+			window.addEventListener('touchmove', onSingleTouchMove, false);
+		</script>
+	</body>
+</html>
