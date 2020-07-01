@@ -3,3 +3,23 @@
   font-size: 16px;
   font-family: sans-serif;
 }
+
+.mask {
+  top: 0;
+  max-height: 100vh;
+}
+
+.h-20 {
+  min-height: 20%;
+}
+
+.top-part, .bottom-part, .left-part, .right-part {
+  background: black;
+}
+
+.middle-part {
+  min-width: 100px;
+  min-height: 100%;
+  background: url(./Assets/Images/predator_logo.svg) center center rgba(0, 0, 0, 0);
+  background-size: 100% auto;
+}
