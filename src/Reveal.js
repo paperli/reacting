@@ -27,10 +27,10 @@ function calcLogoOpacity(scrollY) {
 
 function Footer() {
   return (
-    <div className="row footer d-flex flex-column py-4 position-relative">
-      <div className="social"><a href="#">Instagram</a></div>
-      <div className="credit">© Diing Inc. 2020</div>
-      <div className="divider clearfix"></div>
+    <div className="row footer d-flex flex-column align-items-center mt-4">
+      <div className="divider"></div>
+      <div className="social mt-3 mb-3 d-flex flex-row"><a href="#" className="instagram">&nbsp;</a></div>
+      <div className="credit mb-4">© Diing Inc. 2020</div>
     </div>
   );
 }
