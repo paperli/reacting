@@ -89,7 +89,7 @@ function Reveal() {
             </ul>
             <a href="https://predatorxosim.com" className="btn btn-primary btn-main mb-5" target="_blank" rel="noopener noreferrer" role="button">Find Out More</a>
           </div>
-          <div className="qrcode ml-md-1 mb-4">&nbsp;</div>
+          <div className="qrcode ml-md-2 mb-4">&nbsp;</div>
         </div>
       </div>
       <Footer />
