@@ -60,14 +60,17 @@ function Reveal() {
           </div>
         </div>
       </div>
-      <div className="row d-flex justify-content-center">
-        <div className="pt-4 event w-100" style={{height: 900, background: "black"}}>
-          <h1>Win The Prize</h1>
-          <ul className="d-flex flex-column align-items-left rules">
-            <li><div className="icon"></div><div className="description flex-grow-1">Press the AR button to try the chair in your physical place.</div></li>
-            <li><div className="icon"></div><div className="description flex-grow-1">Find the coupon code in the chair in the AR mode.</div></li>
-            <li><div className="icon"></div><div className="description flex-grow-1">Go to Store and shop a chair with the coupon code.</div></li>
-          </ul>
+      <div className="row">
+        <div className="container d-flex align-items-center justify-content-center flex-column flex-md-row my-4">
+          <div className="event flex-grow-1" style={{background: "black"}}>
+            <h1>Win The Prize</h1>
+            <ul className="d-flex flex-column align-items-left rules">
+              <li><div className="icon"></div><div className="description flex-grow-1">Press the AR button to try the chair in your physical place.</div></li>
+              <li><div className="icon"></div><div className="description flex-grow-1">Find the coupon code in the chair in the AR mode.</div></li>
+              <li><div className="icon"></div><div className="description flex-grow-1">Go to Store and shop a chair with the coupon code.</div></li>
+            </ul>
+          </div>
+          <div className="qrcode">&nbsp;</div>
         </div>
       </div>
     </div>

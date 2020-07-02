@@ -35,7 +35,7 @@
 }
 
 .event {
-  max-width: 60rem;
+  
 }
 
 .event > ul {
@@ -61,4 +61,10 @@
 
 .rules .description {
   font-size: 1.2rem;
+}
+
+.qrcode {
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
 }
