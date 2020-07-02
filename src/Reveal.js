@@ -27,7 +27,7 @@ function calcLogoOpacity(scrollY) {
 
 function Footer() {
   return (
-    <div className="row footer d-flex flex-column align-items-center mt-4">
+    <div className="row footer d-flex flex-column align-items-center">
       <div className="divider"></div>
       <div className="social mt-3 mb-3 d-flex flex-row"><a href="#" className="instagram">&nbsp;</a></div>
       <div className="credit mb-4">© Diing Inc. 2020</div>
@@ -72,17 +72,18 @@ function Reveal() {
         </div>
       </div>
       <div className="row">
-        <div className="container d-flex align-items-center justify-content-center flex-column flex-md-row my-4">
+        <div className="container d-flex align-items-center justify-content-center flex-column flex-md-row mt-5 mb-4">
           <div className="event flex-grow-1" style={{background: "black"}}>
             <h1>Win Your Prize</h1>
             <ul className="d-flex flex-column align-items-left rules">
-              <li><div className="icon"></div><div className="description flex-grow-1">Open this page in a mobile device*. Press the AR button above and place the chair in your physical space.</div></li>
+              <li><div className="icon"></div><div className="description flex-grow-1">Open this page in an AR-enabled mobile device*. Press the AR button above and place the chair in your physical space.</div></li>
               <li><div className="icon"></div><div className="description flex-grow-1">Explore the chair in AR mode and find the coupon code on it. Look carefully, it hides somewhere.</div></li>
               <li><div className="icon"></div><div className="description flex-grow-1">Go to the <a href="#">Store</a>, shop a chair you like, enter the coupon code during the checkout. Give yourself a cheer, you win the prize!</div></li>
               <li><footnote>* Support iPhone and iPad with iOS 12+, and Google Chrome v83 in an Android device.</footnote></li>
             </ul>
+            <a href="https://predatorxosim.com" className="btn btn-primary btn-main mb-5" target="_blank" rel="noopener noreferrer" role="button">Find Out More</a>
           </div>
-          <div className="qrcode ml-md-1">&nbsp;</div>
+          <div className="qrcode ml-md-1 mb-4">&nbsp;</div>
         </div>
       </div>
       <Footer />

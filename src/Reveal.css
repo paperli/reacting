@@ -8,6 +8,37 @@ footnote {
   color: rgba(255, 255, 255, 0.64);
 }
 
+a {
+  color: #31A5BB;
+  transition: color 0.2s ease-out;
+}
+
+a:hover {
+  color: #298a9d;
+  text-decoration: none;
+}
+
+.btn-main {
+  background-color: #31A5BB;
+  border-color: #31A5BB;
+}
+
+.btn-main:hover {
+  background-color: #298a9d;
+  border-color: #268193;
+}
+
+.btn-main:focus {
+  background-color: #298a9d;
+  border-color: #268193;
+  box-shadow: 0 0 0 0.2rem rgba(80, 179, 197, 0.5);
+}
+
+.btn-main:not(:disabled):not(.disabled):active, .btn-main:not(:disabled):not(.disabled).active {
+  background-color: #268193;
+  border-color: #247888;
+}
+
 .main {
   text-align: center;
   font-size: 16px;
