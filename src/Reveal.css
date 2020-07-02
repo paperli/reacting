@@ -3,6 +3,11 @@ h1 {
   font-size: 3rem;
 }
 
+footnote {
+  font-size: 0.86rem;
+  color: rgba(255, 255, 255, 0.64);
+}
+
 .main {
   text-align: center;
   font-size: 16px;

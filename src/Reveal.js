@@ -76,9 +76,10 @@ function Reveal() {
           <div className="event flex-grow-1" style={{background: "black"}}>
             <h1>Win Your Prize</h1>
             <ul className="d-flex flex-column align-items-left rules">
-              <li><div className="icon"></div><div className="description flex-grow-1">Press the AR button to try the chair in your physical place.</div></li>
-              <li><div className="icon"></div><div className="description flex-grow-1">Find the coupon code in the chair in the AR mode.</div></li>
-              <li><div className="icon"></div><div className="description flex-grow-1">Go to Store and shop a chair with the coupon code.</div></li>
+              <li><div className="icon"></div><div className="description flex-grow-1">Open this page in a mobile device*. Press the AR button above and place the chair in your physical space.</div></li>
+              <li><div className="icon"></div><div className="description flex-grow-1">Explore the chair in AR mode and find the coupon code on it. Look carefully, it hides somewhere.</div></li>
+              <li><div className="icon"></div><div className="description flex-grow-1">Go to the <a href="#">Store</a>, shop a chair you like, enter the coupon code during the checkout. Give yourself a cheer, you win the prize!</div></li>
+              <li><footnote>* Support iPhone and iPad with iOS 12+, and Google Chrome v83 in an Android device.</footnote></li>
             </ul>
           </div>
           <div className="qrcode ml-md-1">&nbsp;</div>
