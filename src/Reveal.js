@@ -14,7 +14,11 @@ function interpolate(x, xMin, xMax, yMin, yMax, clipMin = true) {
 }
 
 function calcHeaderOffset(scrollY) {
-  return Math.min(scrollY, SCROLL_TRAVEL_DISTANCE);
+  return Math.min(scrollY, SCROLL_TRAVEL_DISTANCE + 100);
+}
+
+function maskShallHide(scrollY) {
+  return scrollY > SCROLL_TRAVEL_DISTANCE
 }
 
 function calcLogoScale(scrollY) {
@@ -59,15 +63,17 @@ function Reveal() {
     <div className="main container-fluid" style={{transform: `translate(0,${calcHeaderOffset(scrollY)}px)`}}>
       <div className="row">
         <div className="showcase overflow-hidden w-100 bg-dark position-relative">
-          <div className="chair h-100 w-100">&nbsp;</div>
-          <div className="mask w-100 h-100 position-absolute d-flex flex-column" style={{transform: `scale(${calcLogoScale(scrollY)})`, opacity: calcLogoOpacity(scrollY)}}>
-            <div className="top-part w-100 h-20"></div>
-            <div className="center-part w-100 flex-grow-1 d-flex flex-row">
+          <div className="chair h-100 w-100">
+            
+          </div>
+          <div className={`mask w-100 h-100 position-absolute flex-column ${maskShallHide(scrollY) ? "d-none" : "d-flex"}`} style={{transform: `scale(${calcLogoScale(scrollY)})`, opacity: calcLogoOpacity(scrollY)}}>
+            <div className="top-part w-100 flex-grow-1"></div>
+            <div className="center-part w-100 d-flex flex-row">
               <div className="left-part flex-grow-1">&nbsp;</div>
-              <div className="middle-part" ref={middlePartRef} style={{width: logoHeight}}>&nbsp;</div>
+              <div className="middle-part" ref={middlePartRef} style={{width: 300, height: 300}}>&nbsp;</div>
               <div className="right-part flex-grow-1">&nbsp;</div>
             </div>
-            <div className="bottom-part w-100 h-20"></div>
+            <div className="bottom-part w-100 flex-grow-1"></div>
           </div>
         </div>
       </div>
@@ -79,7 +85,7 @@ function Reveal() {
               <li><div className="icon"></div><div className="description flex-grow-1">Open this page in an AR-enabled mobile device*. Press the AR button above and place the chair in your physical space.</div></li>
               <li><div className="icon"></div><div className="description flex-grow-1">Explore the chair in AR mode and find the coupon code on it. Look carefully, it hides somewhere.</div></li>
               <li><div className="icon"></div><div className="description flex-grow-1">Go to the <a href="#">Store</a>, shop a chair you like, enter the coupon code during the checkout. Give yourself a cheer, you win the prize!</div></li>
-              <li><footnote>* Support iPhone and iPad with iOS 12+, and Google Chrome v83 in an Android device.</footnote></li>
+              <li><div className="footnote">* Support iPhone and iPad with iOS 12+, and Google Chrome v83 in an Android device.</div></li>
             </ul>
             <a href="https://predatorxosim.com" className="btn btn-primary btn-main mb-5" target="_blank" rel="noopener noreferrer" role="button">Find Out More</a>
           </div>
