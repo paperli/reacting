@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/reacting/static/css/main.4b99b68c.chunk.css",
-    "main.js": "/reacting/static/js/main.9c67bed0.chunk.js",
-    "main.js.map": "/reacting/static/js/main.9c67bed0.chunk.js.map",
+    "main.css": "/reacting/static/css/main.1df1376a.chunk.css",
+    "main.js": "/reacting/static/js/main.64c39f25.chunk.js",
+    "main.js.map": "/reacting/static/js/main.64c39f25.chunk.js.map",
     "runtime-main.js": "/reacting/static/js/runtime-main.a331e50d.js",
     "runtime-main.js.map": "/reacting/static/js/runtime-main.a331e50d.js.map",
     "static/css/2.9de105d4.chunk.css": "/reacting/static/css/2.9de105d4.chunk.css",
-    "static/js/2.51e0f006.chunk.js": "/reacting/static/js/2.51e0f006.chunk.js",
-    "static/js/2.51e0f006.chunk.js.map": "/reacting/static/js/2.51e0f006.chunk.js.map",
+    "static/js/2.1d8dd355.chunk.js": "/reacting/static/js/2.1d8dd355.chunk.js",
+    "static/js/2.1d8dd355.chunk.js.map": "/reacting/static/js/2.1d8dd355.chunk.js.map",
     "index.html": "/reacting/index.html",
-    "precache-manifest.08cdda9c39ef084c60b6515470cc7474.js": "/reacting/precache-manifest.08cdda9c39ef084c60b6515470cc7474.js",
+    "precache-manifest.43b8072975e92679748e46e9bd2f3448.js": "/reacting/precache-manifest.43b8072975e92679748e46e9bd2f3448.js",
     "service-worker.js": "/reacting/service-worker.js",
     "static/css/2.9de105d4.chunk.css.map": "/reacting/static/css/2.9de105d4.chunk.css.map",
-    "static/css/main.4b99b68c.chunk.css.map": "/reacting/static/css/main.4b99b68c.chunk.css.map",
-    "static/js/2.51e0f006.chunk.js.LICENSE.txt": "/reacting/static/js/2.51e0f006.chunk.js.LICENSE.txt",
+    "static/css/main.1df1376a.chunk.css.map": "/reacting/static/css/main.1df1376a.chunk.css.map",
+    "static/js/2.1d8dd355.chunk.js.LICENSE.txt": "/reacting/static/js/2.1d8dd355.chunk.js.LICENSE.txt",
     "static/media/OSIMxPredator-01.png": "/reacting/static/media/OSIMxPredator-01.33857cbd.png",
-    "static/media/predator_logo.svg": "/reacting/static/media/predator_logo.b43ce443.svg"
+    "static/media/Reveal.css": "/reacting/static/media/predator_logo.b43ce443.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.a331e50d.js",
     "static/css/2.9de105d4.chunk.css",
-    "static/js/2.51e0f006.chunk.js",
-    "static/css/main.4b99b68c.chunk.css",
-    "static/js/main.9c67bed0.chunk.js"
+    "static/js/2.1d8dd355.chunk.js",
+    "static/css/main.1df1376a.chunk.css",
+    "static/js/main.64c39f25.chunk.js"
   ]
 }
