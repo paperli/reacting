@@ -70,7 +70,7 @@ function Reveal() {
               <li><div className="icon"></div><div className="description flex-grow-1">Go to Store and shop a chair with the coupon code.</div></li>
             </ul>
           </div>
-          <div className="qrcode">&nbsp;</div>
+          <div className="qrcode ml-md-1">&nbsp;</div>
         </div>
       </div>
     </div>
