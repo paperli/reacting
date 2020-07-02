@@ -1,7 +1,6 @@
 import React from 'react';
 import './Reveal.css';
 import hero_image from './Assets/Images/OSIMxPredator-01.png';
-import logo_image from './Assets/Images/predator_logo.svg';
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -22,7 +21,7 @@ function calcLogoScale(scrollY) {
 }
 
 function calcLogoOpacity(scrollY) {
-  return 1 - interpolate(scrollY, 200 - 50, 200, 0, 1);
+  return 1 - interpolate(scrollY, 200 - 150, 200, 0, 1);
 }
 
 function Reveal() {
@@ -46,10 +45,10 @@ function Reveal() {
   });
 
   return (
-    <div className="main container-fluid">
+    <div className="main container-fluid" style={{transform: `translate(0,${calcHeaderOffset(scrollY)}px)`}}>
       <div className="row">
-        <div className="showcase overflow-hidden w-100 bg-dark position-relative" style={{transform: `translate(0,${calcHeaderOffset(scrollY)}px)`}}>
-          <img src={hero_image} alt="PREDATORxOSIM" width="100%" height="100%" className="chair"/>
+        <div className="showcase overflow-hidden w-100 bg-dark position-relative">
+          <div className="chair h-100 w-100">&nbsp;</div>
           <div className="mask w-100 h-100 position-absolute d-flex flex-column" style={{transform: `scale(${calcLogoScale(scrollY)})`, opacity: calcLogoOpacity(scrollY)}}>
             <div className="top-part w-100 h-20"></div>
             <div className="center-part w-100 flex-grow-1 d-flex flex-row">
@@ -61,8 +60,15 @@ function Reveal() {
           </div>
         </div>
       </div>
-      <div className="row">
-        <div className="col-12" style={{height: 200, background: "black"}}></div>
+      <div className="row d-flex justify-content-center">
+        <div className="pt-4 event w-100" style={{height: 900, background: "black"}}>
+          <h1>Win The Prize</h1>
+          <ul className="d-flex flex-column align-items-left rules">
+            <li><div className="icon"></div><div className="description flex-grow-1">Press the AR button to try the chair in your physical place.</div></li>
+            <li><div className="icon"></div><div className="description flex-grow-1">Find the coupon code in the chair in the AR mode.</div></li>
+            <li><div className="icon"></div><div className="description flex-grow-1">Go to Store and shop a chair with the coupon code.</div></li>
+          </ul>
+        </div>
       </div>
     </div>
   );
