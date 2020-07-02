@@ -1,7 +1,11 @@
+h1 {
+  font-weight: 900;
+  font-size: 3rem;
+}
+
 .main {
   text-align: center;
   font-size: 16px;
-  font-family: sans-serif;
   color: white;
 }
 
@@ -35,7 +39,7 @@
 }
 
 .event {
-  
+  text-align: left;
 }
 
 .event > ul {
@@ -68,4 +72,17 @@
   height: 200px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
+}
+
+.footer {
+  background: black;
+}
+
+.footer .divider {
+  background: rgb(250,0,0);
+  background: linear-gradient(90deg, rgba(250,0,0,1) 0%, rgba(171,180,39,1) 24%, rgba(20,210,72,1) 42%, rgba(22,168,149,1) 58%, rgba(85,6,160,1) 78%, rgba(255,0,0,1) 100%);
+  height: 1px;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }

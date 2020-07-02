@@ -1,9 +1,10 @@
 import React from 'react';
 import './Reveal.css';
-import hero_image from './Assets/Images/OSIMxPredator-01.png';
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
+
+const SCROLL_TRAVEL_DISTANCE = 300;
 
 function interpolate(x, xMin, xMax, yMin, yMax, clipMin = true) {
   if (clipMin) {
@@ -13,15 +14,25 @@ function interpolate(x, xMin, xMax, yMin, yMax, clipMin = true) {
 }
 
 function calcHeaderOffset(scrollY) {
-  return Math.min(scrollY, 200);
+  return Math.min(scrollY, SCROLL_TRAVEL_DISTANCE);
 }
 
 function calcLogoScale(scrollY) {
-  return interpolate(scrollY, 0, 200, 1, 10);
+  return interpolate(scrollY, 0, SCROLL_TRAVEL_DISTANCE, 1, 10);
 }
 
 function calcLogoOpacity(scrollY) {
-  return 1 - interpolate(scrollY, 200 - 150, 200, 0, 1);
+  return 1 - interpolate(scrollY, SCROLL_TRAVEL_DISTANCE - 150, SCROLL_TRAVEL_DISTANCE, 0, 1);
+}
+
+function Footer() {
+  return (
+    <div className="row footer d-flex flex-column py-4 position-relative">
+      <div className="social"><a href="#">Instagram</a></div>
+      <div className="credit">© Diing Inc. 2020</div>
+      <div className="divider clearfix"></div>
+    </div>
+  );
 }
 
 function Reveal() {
@@ -63,7 +74,7 @@ function Reveal() {
       <div className="row">
         <div className="container d-flex align-items-center justify-content-center flex-column flex-md-row my-4">
           <div className="event flex-grow-1" style={{background: "black"}}>
-            <h1>Win The Prize</h1>
+            <h1>Win Your Prize</h1>
             <ul className="d-flex flex-column align-items-left rules">
               <li><div className="icon"></div><div className="description flex-grow-1">Press the AR button to try the chair in your physical place.</div></li>
               <li><div className="icon"></div><div className="description flex-grow-1">Find the coupon code in the chair in the AR mode.</div></li>
@@ -73,6 +84,7 @@ function Reveal() {
           <div className="qrcode ml-md-1">&nbsp;</div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
