@@ -214,8 +214,21 @@ a:hover {
 .qrcode {
   min-width: 200px;
   height: 200px;
-  background: rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
+  background: url(./Assets/Images/qrcode.png) no-repeat center center rgba(255, 255, 255, 0.1);
+  background-size: 100%;
+  box-sizing: border-box;
+  animation: shining 2s ease-in-out infinite alternate;
+}
+
+@keyframes shining {
+  0% {
+    box-shadow: 0px 0px 0px #31A5BB;
+  }
+
+  100% {
+    box-shadow: 0px 0px 12px #31A5BB;
+  }
 }
 
 .footer {
