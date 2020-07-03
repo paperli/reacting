@@ -13,6 +13,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "bootstrap": "^4.5.0",
+    "lottie-web-react": "^1.0.3",
     "partykals": "^1.0.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
