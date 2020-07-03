@@ -223,18 +223,21 @@ a:hover {
 }
 
 .footer .social > a {
-  display: block;
+  display: flex;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   width: 48px;
   height: 48px;
-  transition: background 0.6s ease-out;
+  transition: all 0.6s ease-out;
+  justify-content: center;
+  align-items: center;
 }
 
 .footer .social > a:hover {
   text-decoration: none;
   border: none;
   background: rgba(255, 255, 255, 0.16);
+  transform: scale(1.1);
 }
 
 .footer .divider {

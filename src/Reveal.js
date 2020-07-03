@@ -3,6 +3,8 @@ import './Reveal.css';
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 const SCROLL_TRAVEL_DISTANCE = 300;
 
@@ -33,7 +35,7 @@ function Footer() {
   return (
     <div className="row footer d-flex flex-column align-items-center">
       <div className="divider"></div>
-      <div className="social mt-3 mb-3 d-flex flex-row"><a href="#" className="instagram">&nbsp;</a></div>
+      <div className="social mt-3 mb-3 d-flex flex-row"><a href="https://www.instagram.com/predatorgaming/" className="instagram"><FontAwesomeIcon icon={faInstagram} size="2x"/></a></div>
       <div className="credit mb-4">© Diing Inc. 2020</div>
     </div>
   );
