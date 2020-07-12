@@ -9,6 +9,8 @@ import Lottie from 'lottie-web-react';
 import iconShop from './Assets/Animation/shop.json';
 import iconAR from './Assets/Animation/ar.json';
 import iconCode from './Assets/Animation/code.json';
+import FadeIn from "react-fade-in";
+import ContentLoader from "react-content-loader";
 
 const SCROLL_TRAVEL_DISTANCE = 300;
 
@@ -49,6 +51,7 @@ function Reveal() {
   const middlePartRef = useRef(null);
   //const [logoHeight, setLogoHeight] = useState(200);
   const [scrollY, setScrollY] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     function handleResize() {
@@ -63,28 +66,47 @@ function Reveal() {
     handleResize();
     window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleScroll);
+
+    fetch("https://modelviewer.dev/shared-assets/models/Astronaut.glb")
+      .then(() => {
+        setTimeout(() => setLoading(false), 4000);
+      });
   });
 
   return (
     <div className="main container-fluid" style={{transform: `translate(0,${calcHeaderOffset(scrollY)}px)`}}>
-      <div className="row">
-        <div className="showcase overflow-hidden w-100 bg-dark position-relative">
-          <div className="chair h-100 w-100">
-            <div className="realityfab-wrapper">
-              <iframe style={{border: "none", background: "transparent"}} scrolling="no" width="100%" height="100%" allow="fullscreen" src="http://localhost:3000/reacting/embed.html" frameborder="0"></iframe>
+      {loading ? (
+        <ContentLoader
+          style={{width:"100%"}}
+          speed={2}
+          height={600}
+          backgroundColor="#f3f3f3"
+          foregroundColor="#cccccc"
+        >
+          <rect x="0" y="0" rx="2" ry="2" width="100%" height="600" />
+        </ContentLoader>
+      ) : (
+        <FadeIn>
+        <div className="row">
+            <div className="showcase overflow-hidden w-100 bg-dark position-relative">
+              <div className="chair h-100 w-100">
+                <div className="realityfab-wrapper">
+                  <iframe style={{border: "none", background: "transparent"}} scrolling="no" width="100%" height="100%" allow="fullscreen" src="http://localhost:3000/reacting/embed.html" frameborder="0"></iframe>
+                </div>
+              </div>
+              <div className={`mask w-100 h-100 position-absolute flex-column ${maskShallHide(scrollY) ? "d-none" : "d-flex"}`} style={{transform: `scale(${calcLogoScale(scrollY)})`, opacity: calcLogoOpacity(scrollY)}}>
+                <div className="top-part w-100 flex-grow-1"></div>
+                <div className="center-part w-100 d-flex flex-row">
+                  <div className="left-part flex-grow-1">&nbsp;</div>
+                  <div className="middle-part" ref={middlePartRef} style={{width: 300, height: 300}}>&nbsp;</div>
+                  <div className="right-part flex-grow-1">&nbsp;</div>
+                </div>
+                <div className="bottom-part w-100 flex-grow-1"></div>
+              </div>
             </div>
-          </div>
-          <div className={`mask w-100 h-100 position-absolute flex-column ${maskShallHide(scrollY) ? "d-none" : "d-flex"}`} style={{transform: `scale(${calcLogoScale(scrollY)})`, opacity: calcLogoOpacity(scrollY)}}>
-            <div className="top-part w-100 flex-grow-1"></div>
-            <div className="center-part w-100 d-flex flex-row">
-              <div className="left-part flex-grow-1">&nbsp;</div>
-              <div className="middle-part" ref={middlePartRef} style={{width: 300, height: 300}}>&nbsp;</div>
-              <div className="right-part flex-grow-1">&nbsp;</div>
-            </div>
-            <div className="bottom-part w-100 flex-grow-1"></div>
-          </div>
         </div>
-      </div>
+        </FadeIn>
+      )}
       <div className="row">
         <div className="container d-flex align-items-center justify-content-center flex-column flex-md-row mt-5 mb-4">
           <div className="event flex-grow-1" style={{background: "black"}}>
