@@ -11,6 +11,7 @@ import iconAR from './Assets/Animation/ar.json';
 import iconCode from './Assets/Animation/code.json';
 import FadeIn from "react-fade-in";
 import ContentLoader from "react-content-loader";
+import { useTranslation } from 'react-i18next';
 
 const SCROLL_TRAVEL_DISTANCE = 300;
 
@@ -51,6 +52,7 @@ function Reveal() {
   const middlePartRef = useRef(null);
   const [scrollY, setScrollY] = useState(0);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     function handleResize() {
@@ -108,19 +110,21 @@ function Reveal() {
       <div className="row">
         <div className="container d-flex align-items-center justify-content-center flex-column flex-md-row mt-5 mb-4">
           <div className="event flex-grow-1" style={{background: "black"}}>
-            <h1>贏得您的獎勵</h1>
+            <h1>{t('head')}</h1>
             <ul className="d-flex flex-column align-items-left rules">
               <li>
                 <div className="icon ar-lottie"><Lottie className="lottie-icon" options={{autoplay: true, animationData: iconAR, loop: true}} playingState={"play"}></Lottie></div>
-                <div className="description flex-grow-1">在擴增實境相容的裝置*上開啟本頁，點擊上面的擴增實境按鈕，在您的房間或是辦公室等空間中體驗電競座椅的舒適感受。</div></li>
+                <div className="description flex-grow-1">{t('description1')}</div>
+              </li>
               <li>
                 <div className="icon code-lottie"><Lottie className="lottie-icon" options={{autoplay: true, animationData: iconCode, loop: true}} playingState={"play"}></Lottie></div>
-                <div className="description flex-grow-1">當您在擴增實境中體驗電競座椅時，花點時間，在座椅上尋找優惠代碼。請仔細觀察，優惠代碼就藏在座椅的某個地方。</div></li>
+                <div className="description flex-grow-1">{t('description2')}</div>
+              </li>
               <li>
                 <div className="icon shop-lottie"><Lottie className="lottie-icon" options={{autoplay: true, animationData: iconShop, loop: true}} playingState={"play"}></Lottie></div>
-                <div className="description flex-grow-1">前往<a href="#">商店</a>，挑選並購買您喜歡的電競座椅，在結帳時輸入優惠代碼。恭喜您完成任務，贏得折扣獎勵！</div>
-                </li>
-              <li><div className="footnote">* 擴增實境體驗適用於搭載 iOS 12 或以上的 iPhone 及 iPad，或是安裝了 Google Chrome v83 版本的 Android 裝置。</div></li>
+                <div className="description flex-grow-1">{t('description3.phrase1')}<a href="#">{t('description3.phrase2')}</a>{t('description3.phrase3')}</div>
+              </li>
+              <li><div className="footnote">{t('compatibility_note')}</div></li>
             </ul>
             <a href="https://predatorxosim.com" className="btn btn-primary btn-main mb-5" target="_blank" rel="noopener noreferrer" role="button">Find Out More</a>
           </div>
