@@ -49,13 +49,11 @@ function Footer() {
 
 function Reveal() {
   const middlePartRef = useRef(null);
-  //const [logoHeight, setLogoHeight] = useState(200);
   const [scrollY, setScrollY] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     function handleResize() {
-      //setLogoHeight(middlePartRef.current.offsetHeight);
       handleScroll();
     }
 
