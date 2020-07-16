@@ -91,7 +91,7 @@ function Reveal() {
             <div className="showcase overflow-hidden w-100 bg-dark position-relative">
               <div className="chair h-100 w-100">
                 <div className="realityfab-wrapper">
-                  <iframe style={{border: "none", background: "transparent"}} scrolling="no" width="100%" height="100%" allow="fullscreen" src="http://localhost:3000/reacting/embed.html" frameborder="0"></iframe>
+                  <iframe style={{border: "none", background: "transparent"}} scrolling="no" width="100%" height="100%" allow="fullscreen" src={`${process.env.PUBLIC_URL}/embed.html`} frameborder="0" title="realityfab"></iframe>
                 </div>
               </div>
               <div className={`mask w-100 h-100 position-absolute flex-column ${maskShallHide(scrollY) ? "d-none" : "d-flex"}`} style={{transform: `scale(${calcLogoScale(scrollY)})`, opacity: calcLogoOpacity(scrollY)}}>
